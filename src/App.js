@@ -19,19 +19,21 @@ const footerStyle = {
   color: "#fff",
   backgroundColor: "#4096ff",
 }
-console.log(formJson.fields, "formJson")
+
+console.log(formJson, "formJson")
 
 const { Option } = Select
-const Context = React.createContext({
-  name: "Default",
-})
 
 function App() {
   const [form] = Form.useForm()
   const [api, contextHolder] = notification.useNotification()
-  const methods = useGoogleForm({ form })
+  const methods = useGoogleForm({ form: formJson })
 
   const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const [selectedDimension, setSelectedDimension] = useState(null)
+  const [selectedElement, setSelectedElement] = useState(null)
+  const [selectedSubelement, setSelectedSubelement] = useState(null)
+
   const openNotification = (
     placement,
     description = "This is the content of the notification."
@@ -47,15 +49,12 @@ function App() {
     console.log(">>> Here is the data", data)
     console.log(">>> Here are the errors!!!", methods.formState.errors)
     await methods.submitToGoogleForms(data)
+    console.log(methods, "methods")
     setTimeout(() => {
       setLoadingSubmit(false)
       openNotification("topRight", "Datamu berhasil di submit!")
     }, 1000)
   }
-
-  const [selectedDimension, setSelectedDimension] = useState(null)
-  const [selectedElement, setSelectedElement] = useState(null)
-  const [selectedSubelement, setSelectedSubelement] = useState(null)
   const onFinish = (event) => {
     event.preventDefault()
     setLoadingSubmit(true)
@@ -78,15 +77,7 @@ function App() {
 
     methods.handleSubmit(onSubmit(body))
   }
-  const onReset = () => {
-    form.resetFields()
-  }
-  const onFill = () => {
-    form.setFieldsValue({
-      note: "Hello world!",
-      gender: "male",
-    })
-  }
+
   return (
     <Layout className="min-h-screen">
       {contextHolder}
@@ -108,14 +99,13 @@ function App() {
           src={require("./assets/img/merdeka.png")}
         />
         <div className="text-md lg:text-xl font-bold lg:mr-2 mr-3">
-          Prototype Aplikasi P5
+          {formJson.title}
         </div>
       </div>
 
       <Content style={contentStyle}>
         <GoogleFormProvider {...methods}>
           <Form
-            id={form.field}
             layout="vertical"
             form={form}
             name="p5-form"
