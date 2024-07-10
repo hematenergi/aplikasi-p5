@@ -53,6 +53,7 @@ function App() {
     setTimeout(() => {
       setLoadingSubmit(false)
       openNotification("topRight", "Datamu berhasil di submit!")
+      form.resetFields()
     }, 1000)
   }
   const onFinish = (event) => {
