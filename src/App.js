@@ -46,6 +46,7 @@ function App() {
   }
 
   const onSubmit = async (data) => {
+    setLoadingSubmit(true)
     console.log(">>> Here is the data", data)
     console.log(">>> Here are the errors!!!", methods.formState.errors)
     await methods.submitToGoogleForms(data)
@@ -57,15 +58,14 @@ function App() {
     }, 1000)
   }
   const onFinish = (event) => {
-    event.preventDefault()
-    setLoadingSubmit(true)
+    // console.log(event, "event")
 
     const values = form.getFieldsValue()
     console.log(values, "values")
 
     const findLabelStringById = (data, id) => {
       const newData = data.find((value) => value.id === id)
-      return newData.label
+      return newData?.label
     }
 
     let body = {
@@ -77,6 +77,9 @@ function App() {
     }
 
     methods.handleSubmit(onSubmit(body))
+  }
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo)
   }
 
   return (
@@ -111,6 +114,8 @@ function App() {
             form={form}
             name="p5-form"
             onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
           >
             <Form.Item
               name="Sekolah"
@@ -238,7 +243,6 @@ function App() {
                 type="primary"
                 htmlType="submit"
                 className="w-full lg:w-auto"
-                onClick={onFinish}
               >
                 Submit
               </Button>
