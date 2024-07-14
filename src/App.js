@@ -31,6 +31,7 @@ function App() {
 
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [selectedDimension, setSelectedDimension] = useState(null)
+  console.log(selectedDimension, "selectedDimension")
   const [selectedElement, setSelectedElement] = useState(null)
   const [selectedSubelement, setSelectedSubelement] = useState(null)
 
@@ -80,6 +81,16 @@ function App() {
   }
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo)
+  }
+
+  const getDescription = (data = [], selected) => {
+    if (selected) {
+      return (
+        <p className="mt-4 text-[#6B7280] text-xs">
+          Deskripsi : "{data?.find((d) => d.id === selected)?.description}"
+        </p>
+      )
+    }
   }
 
   return (
@@ -164,6 +175,8 @@ function App() {
                   )
                 })}
               </Select>
+
+              {getDescription(Dimensions, selectedDimension)}
             </Form.Item>
 
             <Form.Item
@@ -195,6 +208,8 @@ function App() {
                   )
                 })}
               </Select>
+
+              {getDescription(Elements, selectedElement)}
             </Form.Item>
 
             <Form.Item
@@ -223,6 +238,8 @@ function App() {
                   )
                 })}
               </Select>
+
+              {getDescription(Subelements, selectedSubelement)}
             </Form.Item>
 
             <Form.Item
