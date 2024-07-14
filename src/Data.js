@@ -480,3 +480,54 @@ export const Subelements = [
       "Bereksperimen dengan berbagai pilihan secara kreatif untuk memodifikasi gagasan sesuai dengan perubahan situasi.",
   },
 ]
+
+export const Themes = [
+  {
+    id: 1,
+    label: "Gaya Hidup Berkelanjutan",
+    description:
+      "Peserta didik memahami potensi krisis keberlanjutan yang terjadi di lingkungan sekitar, serta memiliki kesiapan untuk menghadapi dan memitigasinya.",
+  },
+  {
+    id: 2,
+    label: "Kearifan Lokal",
+    description:
+      "Peserta didik membangun rasa ingin tahu dan kemampuan inkuiri melalui eksplorasi budaya dan kearifan lokal masyarakat sekitar. Menelusuri sejarah perkembangan masyarakat lokal/daerahnya, menggali konsep dan nilai-nilai di baliknya, lalu merefleksikan nilai dasar yang dapat diambil untuk diterapkan dalam kehidupan mereka.",
+  },
+  {
+    id: 3,
+    label: "Bhinneka Tunggal Ika",
+    description:
+      "Peserta didik memahami dan mempromosikan budaya perdamaian, menjunjung kemanusiaan, dan anti kekerasan, belajar membangun dialog penuh hormat tentang keberagaman serta nilai-nilai ajaran yang dianutnya.",
+  },
+  {
+    id: 4,
+    label: "Bangunlah Jiwa dan Raganya",
+    description:
+      "Peserta didik mengenali dan memahami bagaimana memelihara dan menjaga kesehatan fisik dan mental dengan merefleksikan pengenalan dan pengalaman diri maupun lingkungan.",
+  },
+  {
+    id: 5,
+    label: "Suara Demokrasi",
+    description:
+      "Peserta didik menggunakan kemampuan berpikir sistem, menjelaskan keterkaitan antara peran individu terhadap kelangsungan demokrasi Pancasila. Melalui pembelajaran ini peserta didik merefleksikan makna demokrasi dan memahami implementasi demokrasi serta tantangannya dalam konteks yang berbeda, termasuk dalam organisasi sekolah, masyarakat dan/atau dalam dunia kerja.",
+  },
+  {
+    id: 6,
+    label: "Kewirausahaan",
+    description:
+      "Peserta didik menumbuhkembangkan kreativitas dan budaya kewirausahaan sebagai upaya pencarian solusi terkait aspek lingkungan, sosial dan kesejahteraan masyarakat.",
+  },
+  {
+    id: 7,
+    label: "Rekayasa dan Teknologi",
+    description:
+      "Peserta didik melatih daya pikir kritis, kreatif, inovatif, sekaligus kemampuan berempati untuk berekayasa membangun produk berteknologi yang memudahkan kegiatan diri dan sekitarnya.",
+  },
+  {
+    id: 8,
+    label: "Kebekerjaan",
+    description:
+      "Peserta didik memahami dunia kerja yang relevan dengan keahliannya dari berbagai aspek. Peserta didik mengidentifikasi permasalahan dan membangun pemahaman tentang ketenagakerjaan, terkait berbagai hal seperti hak dan kewajiban, keselamatan kerja, hingga etika dan profesionalitas dalam bekerja.",
+  },
+]

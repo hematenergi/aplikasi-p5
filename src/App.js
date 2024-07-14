@@ -2,7 +2,7 @@ import { Button, Form, Input, Layout, Select, notification } from "antd"
 import React, { useState } from "react"
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks"
 import "./App.css"
-import { Dimensions, Elements, Subelements } from "./Data"
+import { Dimensions, Elements, Subelements, Themes } from "./Data"
 import formJson from "./scripts/form.json"
 
 const { Footer, Content } = Layout
@@ -34,6 +34,7 @@ function App() {
   console.log(selectedDimension, "selectedDimension")
   const [selectedElement, setSelectedElement] = useState(null)
   const [selectedSubelement, setSelectedSubelement] = useState(null)
+  const [selectedTheme, setSelectedTheme] = useState(null)
 
   const openNotification = (
     placement,
@@ -71,11 +72,14 @@ function App() {
 
     let body = {
       1614735276: values.Sekolah,
+      55847124: values.Kelompok,
       1688946239: findLabelStringById(Dimensions, values.Dimensi),
       1226875206: findLabelStringById(Elements, values.Elemen),
       661708310: findLabelStringById(Subelements, values.Subelemen),
-      1168830625: values.Tema,
+      1168830625: findLabelStringById(Themes, values.Tema),
+      800214939: values.Judul,
     }
+    // console.log(body, "body")
 
     methods.handleSubmit(onSubmit(body))
   }
@@ -86,7 +90,7 @@ function App() {
   const getDescription = (data = [], selected) => {
     if (selected) {
       return (
-        <p className="mt-4 text-[#6B7280] text-xs">
+        <p className="text-[#6B7280] text-xs mb-4">
           Deskripsi : "{data?.find((d) => d.id === selected)?.description}"
         </p>
       )
@@ -137,14 +141,23 @@ function App() {
                 },
               ]}
             >
-              <Select
-                placeholder="Select a option and change input text above"
-                allowClear
-              >
+              <Select placeholder="Pilih Sekolah berikut" allowClear>
                 <Option value="Sekolah 1">Sekolah 1</Option>
                 <Option value="Sekolah 2">Sekolah 2</Option>
                 <Option value="Sekolah 3">Sekolah 3</Option>
               </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="Kelompok"
+              label="Nama Kelompok"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input placeholder="Masukkan nama kelompok dengan format sbb. contoh :'Kelas 10 Kelompok 1'" />
             </Form.Item>
 
             <Form.Item
@@ -157,7 +170,7 @@ function App() {
               ]}
             >
               <Select
-                placeholder="Select a option and change input text above"
+                placeholder="Pilih dimensi berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
                   setSelectedDimension(value)
@@ -175,9 +188,8 @@ function App() {
                   )
                 })}
               </Select>
-
-              {getDescription(Dimensions, selectedDimension)}
             </Form.Item>
+            {getDescription(Dimensions, selectedDimension)}
 
             <Form.Item
               name="Elemen"
@@ -189,7 +201,7 @@ function App() {
               ]}
             >
               <Select
-                placeholder="Select a option and change input text above"
+                placeholder="Pilih elemen berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
                   setSelectedElement(value)
@@ -208,9 +220,8 @@ function App() {
                   )
                 })}
               </Select>
-
-              {getDescription(Elements, selectedElement)}
             </Form.Item>
+            {getDescription(Elements, selectedElement)}
 
             <Form.Item
               name="Subelemen"
@@ -222,7 +233,7 @@ function App() {
               ]}
             >
               <Select
-                placeholder="Select a option and change input text above"
+                placeholder="Pilih subelemen berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
                   setSelectedSubelement(value)
@@ -238,9 +249,8 @@ function App() {
                   )
                 })}
               </Select>
-
-              {getDescription(Subelements, selectedSubelement)}
             </Form.Item>
+            {getDescription(Subelements, selectedSubelement)}
 
             <Form.Item
               name="Tema"
@@ -251,7 +261,37 @@ function App() {
                 },
               ]}
             >
-              <TextArea rows={2} placeholder="Describe your idea..." />
+              <Select
+                placeholder="Pilih tema berdasarkan pilihan yang tersedia"
+                allowClear
+                onChange={(value) => {
+                  setSelectedTheme(value)
+                }}
+              >
+                {Themes.map(({ id, label }, index, array) => {
+                  return (
+                    <Option key={index.toString()} value={id}>
+                      {label}
+                    </Option>
+                  )
+                })}
+              </Select>
+            </Form.Item>
+            {getDescription(Themes, selectedTheme)}
+
+            <Form.Item
+              name="Judul"
+              label="Judul/Topik"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <TextArea
+                rows={2}
+                placeholder="Deskripsikan ide lengkapmu berdasarkan pilihan yang kamu pilih sebelumnya..."
+              />
             </Form.Item>
 
             <Form.Item>
