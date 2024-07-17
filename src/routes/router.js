@@ -16,11 +16,11 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/siswa",
+        path: "siswa",
         element: <SiswaPage />,
       },
       {
-        path: "/asesmen",
+        path: "asesmen",
         element: (
           <div>
             <h1>asesmen</h1>
@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/asesmen-kelompok",
+        path: "asesmen-kelompok",
         element: (
           <div>
             <h1>asesmen kelompok</h1>

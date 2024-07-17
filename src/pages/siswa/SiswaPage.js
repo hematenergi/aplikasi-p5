@@ -279,7 +279,7 @@ function SiswaPage() {
                 htmlType="submit"
                 className="w-full lg:w-auto"
               >
-                Submit
+                Kirim
               </Button>
             </Form.Item>
           </Form>
