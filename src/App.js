@@ -5,8 +5,6 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./App.css"
 import { convertToTitleCase } from "./utils/helper"
 
-const { Footer } = Layout
-
 function App() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -51,7 +49,7 @@ function App() {
         <Outlet />
       </main>
 
-      <Footer
+      <footer
         className={`
           sticky top-[100vh] z-50 
           backdrop-blur-sm 
@@ -64,7 +62,7 @@ function App() {
         `}
       >
         &copy; 2024 Dany Arkham
-      </Footer>
+      </footer>
     </Layout>
   )
 }
