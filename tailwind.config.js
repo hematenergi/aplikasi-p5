@@ -6,6 +6,7 @@ module.exports = {
       colors: ({ colors }) => {
         return {
           mainColor: "#045CEE",
+          footerColor: "#4096FF",
           redColor: "#B40609",
           link: "#FE3A30",
         }

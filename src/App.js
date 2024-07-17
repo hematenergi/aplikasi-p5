@@ -53,11 +53,10 @@ function App() {
         className={`
           sticky top-[100vh] z-50 
           backdrop-blur-sm 
-          bg-white/80
           border-b-[0.5px] border-['#DADADA'] 
           lg:p-8 p-4 
           text-center
-          bg-[#4096ff]
+          bg-footerColor
           text-white
         `}
       >
