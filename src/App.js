@@ -31,7 +31,7 @@ function App() {
               Kembali
             </Button>
 
-            <div className="text-md font-semibold">
+            <div className="text-md font-semibold mr-4">
               Form {convertToTitleCase(location.pathname)}
             </div>
           </>
@@ -39,7 +39,7 @@ function App() {
 
         <img
           alt="-"
-          className="-ml-4"
+          className={canGoBack ? "-ml-4 hidden md:block " : "-ml-4"}
           width={200}
           src={require("./assets/img/merdeka.png")}
         />
