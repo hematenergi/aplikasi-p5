@@ -5,7 +5,7 @@ import "./../../App.css"
 import { Dimensions, Elements, Subelements, Themes } from "../../data/Data"
 import formJson from "../../scripts/form.json"
 
-const { Footer, Content } = Layout
+const { Content } = Layout
 const { TextArea } = Input
 
 const contentStyle = {
@@ -13,11 +13,6 @@ const contentStyle = {
   justifyContent: "center",
   aliginItems: "center",
   padding: "20px",
-}
-const footerStyle = {
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#4096ff",
 }
 
 console.log(formJson, "formJson")
