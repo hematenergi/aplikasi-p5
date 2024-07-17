@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, LeftOutlined } from "@ant-design/icons"
+import { ArrowLeftOutlined } from "@ant-design/icons"
 import { Button, Layout } from "antd"
 import React from "react"
 import { Outlet, useLocation, useNavigate } from "react-router-dom"

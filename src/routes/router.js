@@ -39,10 +39,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "/siswa",
-    element: <SiswaPage />,
-  },
 ])
 
 export default function Router() {
