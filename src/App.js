@@ -3,7 +3,7 @@ import { Button, Layout } from "antd"
 import React from "react"
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./App.css"
-import { convertToTitleCase } from "./utils/helper"
+import { convertToTitleCase, openInstagram } from "./utils/helper"
 
 function App() {
   const navigate = useNavigate()
@@ -60,7 +60,9 @@ function App() {
           text-white
         `}
       >
-        &copy; 2024 Dany Arkham
+        <button onClick={() => openInstagram("hemat_energi")}>
+          &copy; 2024 Dany Arkham
+        </button>
       </footer>
     </Layout>
   )

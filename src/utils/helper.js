@@ -22,3 +22,8 @@ export const convertToTitleCase = (str) => {
   // Join the words with spaces
   return words.join(" ")
 }
+
+export const openInstagram = (username) => {
+  const url = `https://www.instagram.com/${username}/`
+  window.open(url, "_blank")
+}
