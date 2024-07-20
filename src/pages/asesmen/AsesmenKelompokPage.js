@@ -68,17 +68,6 @@ function AsesmenKelompokPage() {
     console.log("Failed:", errorInfo)
   }
 
-  const getDescription = (data = [], selected) => {
-    console.log("selected", selected)
-    if (selected) {
-      return (
-        <p className="text-[#6B7280] text-xs mb-4">
-          Deskripsi : "{data?.find((d) => d.id === selected)?.description}"
-        </p>
-      )
-    }
-  }
-
   return (
     <Layout className="min-h-screen">
       {contextHolder}
