@@ -1,17 +1,9 @@
-import {
-  Button,
-  ConfigProvider,
-  Form,
-  Input,
-  Layout,
-  Select,
-  notification,
-} from "antd"
+import { Button, Form, Input, Layout, Select, notification } from "antd"
 import React, { useState } from "react"
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks"
-import "./../../App.css"
 import { Dimensions, Elements, Subelements, Themes } from "../../data/Data"
 import formJson from "../../scripts/formP5.json"
+import "./../../App.css"
 
 const { Content } = Layout
 const { TextArea } = Input
@@ -22,9 +14,6 @@ const contentStyle = {
   aliginItems: "center",
   padding: "20px",
 }
-
-const { fields, fieldsOrder } = formJson
-console.log(fields, "fields")
 
 const { Option } = Select
 
