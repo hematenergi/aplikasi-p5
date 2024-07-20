@@ -157,7 +157,7 @@ function AsesmenSiswaPage() {
                 },
               ]}
             >
-              <Input placeholder="Masukkan nilai dari Aspek Mengamati siswa. contoh : 85" />
+              <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
             <Form.Item
@@ -170,7 +170,7 @@ function AsesmenSiswaPage() {
                 },
               ]}
             >
-              <Input placeholder="Masukkan nilai dari Aspek Menanya siswa. contoh : 85" />
+              <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
             <Form.Item
@@ -183,7 +183,7 @@ function AsesmenSiswaPage() {
                 },
               ]}
             >
-              <Input placeholder="Masukkan nilai dari Aspek Menalar/Mengasosiasi siswa. contoh : 85" />
+              <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
             <Form.Item
@@ -196,7 +196,7 @@ function AsesmenSiswaPage() {
                 },
               ]}
             >
-              <Input placeholder="Masukkan nilai dari Aspek Mencoba/Simulasi siswa. contoh : 85" />
+              <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
             <Form.Item
@@ -209,7 +209,7 @@ function AsesmenSiswaPage() {
                 },
               ]}
             >
-              <Input placeholder="Masukkan nilai dari Aspek Mengkomunikasikan/Presentasi siswa. contoh : 85" />
+              <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
             <Form.Item>
