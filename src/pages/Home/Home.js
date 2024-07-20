@@ -23,10 +23,13 @@ export const Home = () => {
       <div className="grid grid-rows-1 md:grid-cols-3 lg:grid-cols-3 gap-5 z-10">
         <Button label={"Form Siswa"} onClick={() => navigate("siswa")} />
         <Button
-          label={"Form Kelompok"}
+          label={"Form Asesmen Siswa"}
+          onClick={() => navigate("asesmen-siswa")}
+        />
+        <Button
+          label={"Form Asesmen Kelompok"}
           onClick={() => navigate("asesmen-kelompok")}
         />
-        <Button label={"Form Asesmen"} onClick={() => navigate("asesmen")} />
       </div>
     </div>
   )

@@ -1,12 +1,4 @@
-import {
-  Button,
-  ConfigProvider,
-  Form,
-  Input,
-  Layout,
-  Select,
-  notification,
-} from "antd"
+import { Button, Form, Input, Layout, Select, notification } from "antd"
 import React, { useState } from "react"
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks"
 import "./../../App.css"
@@ -23,12 +15,11 @@ const contentStyle = {
   padding: "20px",
 }
 
-const { fields, fieldsOrder } = formJson
-console.log(fields, "fields")
+console.log(formJson, "formJson")
 
 const { Option } = Select
 
-function SiswaPage() {
+function AsesmenPage() {
   const [form] = Form.useForm()
   const [api, contextHolder] = notification.useNotification()
   const methods = useGoogleForm({ form: formJson })
@@ -38,9 +29,7 @@ function SiswaPage() {
   console.log(selectedDimension, "selectedDimension")
   const [selectedElement, setSelectedElement] = useState(null)
   const [selectedSubelement, setSelectedSubelement] = useState(null)
-  const [selectedTheme1, setSelectedTheme1] = useState(null)
-  const [selectedTheme2, setSelectedTheme2] = useState(null)
-  const [selectedTheme3, setSelectedTheme3] = useState(null)
+  const [selectedTheme, setSelectedTheme] = useState(null)
 
   const openNotification = (
     placement,
@@ -82,12 +71,8 @@ function SiswaPage() {
       1688946239: findLabelStringById(Dimensions, values.Dimensi),
       1226875206: findLabelStringById(Elements, values.Elemen),
       661708310: findLabelStringById(Subelements, values.Subelemen),
-      1168830625: findLabelStringById(Themes, values.Tema1),
-      800214939: values.Judul1,
-      1468357853: findLabelStringById(Themes, values.Tema2),
-      786338565: values.Judul2,
-      791492921: findLabelStringById(Themes, values.Tema2),
-      299652587: values.Judul2,
+      1168830625: findLabelStringById(Themes, values.Tema),
+      800214939: values.Judul,
     }
     // console.log(body, "body")
 
@@ -98,6 +83,7 @@ function SiswaPage() {
   }
 
   const getDescription = (data = [], selected) => {
+    console.log("selected", selected)
     if (selected) {
       return (
         <p className="text-[#6B7280] text-xs mb-4">
@@ -126,7 +112,6 @@ function SiswaPage() {
               rules={[
                 {
                   required: true,
-                  message: "Pilih Sekolah wajib diisi!",
                 },
               ]}
             >
@@ -143,7 +128,6 @@ function SiswaPage() {
               rules={[
                 {
                   required: true,
-                  message: "Nama Kelompok wajib diisi!",
                 },
               ]}
             >
@@ -156,7 +140,6 @@ function SiswaPage() {
               rules={[
                 {
                   required: true,
-                  message: "Pilih Dimensi wajib diisi!",
                 },
               ]}
             >
@@ -191,7 +174,6 @@ function SiswaPage() {
               rules={[
                 {
                   required: true,
-                  message: "Pilih Elemen wajib diisi!",
                 },
               ]}
             >
@@ -226,7 +208,6 @@ function SiswaPage() {
               rules={[
                 {
                   required: true,
-                  message: "Pilih Subelemen wajib diisi!",
                 },
               ]}
             >
@@ -251,12 +232,11 @@ function SiswaPage() {
             {getDescription(Subelements, selectedSubelement)}
 
             <Form.Item
-              name="Tema1"
-              label="Masukkan Tema 1"
+              name="Tema"
+              label="Masukkan Tema"
               rules={[
                 {
                   required: true,
-                  message: "Masukkan Tema 1 wajib diisi!",
                 },
               ]}
             >
@@ -264,7 +244,7 @@ function SiswaPage() {
                 placeholder="Pilih tema berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
-                  setSelectedTheme1(value)
+                  setSelectedTheme(value)
                 }}
               >
                 {Themes.map(({ id, label }, index, array) => {
@@ -276,101 +256,14 @@ function SiswaPage() {
                 })}
               </Select>
             </Form.Item>
-            {getDescription(Themes, selectedTheme1)}
+            {getDescription(Themes, selectedTheme)}
 
             <Form.Item
-              name="Judul1"
-              label="Judul/Topik 1"
+              name="Judul"
+              label="Judul/Topik"
               rules={[
                 {
                   required: true,
-                  message: "Judul/Topik 1 wajib diisi!",
-                },
-              ]}
-            >
-              <TextArea
-                rows={2}
-                placeholder="Deskripsikan ide lengkapmu berdasarkan pilihan yang kamu pilih sebelumnya..."
-              />
-            </Form.Item>
-            <Form.Item
-              name="Tema2"
-              label="Masukkan Tema 2"
-              rules={[
-                {
-                  required: true,
-                  message: "Masukkan Tema 2 wajib diisi!",
-                },
-              ]}
-            >
-              <Select
-                placeholder="Pilih tema berdasarkan pilihan yang tersedia"
-                allowClear
-                onChange={(value) => {
-                  setSelectedTheme2(value)
-                }}
-              >
-                {Themes.map(({ id, label }, index, array) => {
-                  return (
-                    <Option key={index.toString()} value={id}>
-                      {label}
-                    </Option>
-                  )
-                })}
-              </Select>
-            </Form.Item>
-            {getDescription(Themes, selectedTheme2)}
-
-            <Form.Item
-              name="Judul2"
-              label="Judul/Topik 2"
-              rules={[
-                {
-                  required: true,
-                  message: "Judul/Topik 2 wajib diisi!",
-                },
-              ]}
-            >
-              <TextArea
-                rows={2}
-                placeholder="Deskripsikan ide lengkapmu berdasarkan pilihan yang kamu pilih sebelumnya..."
-              />
-            </Form.Item>
-            <Form.Item
-              name="Tema3"
-              label="Masukkan Tema 3"
-              rules={[
-                {
-                  required: true,
-                  message: "Masukkan Tema 3 wajib diisi!",
-                },
-              ]}
-            >
-              <Select
-                placeholder="Pilih tema berdasarkan pilihan yang tersedia"
-                allowClear
-                onChange={(value) => {
-                  setSelectedTheme3(value)
-                }}
-              >
-                {Themes.map(({ id, label }, index, array) => {
-                  return (
-                    <Option key={index.toString()} value={id}>
-                      {label}
-                    </Option>
-                  )
-                })}
-              </Select>
-            </Form.Item>
-            {getDescription(Themes, selectedTheme3)}
-
-            <Form.Item
-              name="Judul3"
-              label="Judul/Topik 3"
-              rules={[
-                {
-                  required: true,
-                  message: "Judul/Topik 3 wajib diisi!",
                 },
               ]}
             >
@@ -397,4 +290,4 @@ function SiswaPage() {
   )
 }
 
-export default SiswaPage
+export default AsesmenPage

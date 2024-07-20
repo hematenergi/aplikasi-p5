@@ -4,6 +4,7 @@ import App from "../App"
 import { ErrorPage } from "../pages/error/ErrorPage"
 import { Home } from "../pages/Home/Home"
 import SiswaPage from "../pages/siswa/SiswaPage"
+import AsesmenPage from "../pages/asesmen/AsesmenPage"
 
 export const router = createBrowserRouter([
   {
@@ -20,20 +21,14 @@ export const router = createBrowserRouter([
         element: <SiswaPage />,
       },
       {
-        path: "asesmen",
-        element: (
-          <div>
-            <h1>asesmen</h1>
-            <Link to="about">About Us</Link>
-          </div>
-        ),
+        path: "asesmen-siswa",
+        element: <AsesmenPage />,
       },
       {
         path: "asesmen-kelompok",
         element: (
           <div>
             <h1>asesmen kelompok</h1>
-            <Link to="about">About Us</Link>
           </div>
         ),
       },
