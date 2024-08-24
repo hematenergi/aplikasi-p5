@@ -1,27 +1,32 @@
-import React from "react"
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
-import App from "../App"
-import AsesmenKelompokPage from "../pages/asesmen/AsesmenKelompokPage"
-import AsesmenSiswaPage from "../pages/asesmen/AsesmenSiswaPage"
-import { ErrorPage } from "../pages/error/ErrorPage"
-import { Home } from "../pages/Home/Home"
-import SiswaPage from "../pages/siswa/SiswaPage"
-import LoginPage from "../pages/auth/Login"
-import AuthLayout from "../AuthLayout"
+import React from "react";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import App from "../App";
+import AsesmenKelompokPage from "../pages/asesmen/AsesmenKelompokPage";
+import AsesmenSiswaPage from "../pages/asesmen/AsesmenSiswaPage";
+import { ErrorPage } from "../pages/error/ErrorPage";
+import { Home } from "../pages/Home/Home";
+import SiswaPage from "../pages/siswa/SiswaPage";
+import LoginPage from "../pages/auth/Login";
+import AuthLayout from "../AuthLayout";
+import RegisterPage from "../pages/auth/Register";
 
 // Assuming you have a function to check if the user is authenticated
 const isAuthenticated = () => {
-  const token = localStorage.getItem("token") // or however you store your token
-  return !!token // returns true if token exists, false otherwise
-}
+  const token = localStorage.getItem("token"); // or however you store your token
+  return !!token; // returns true if token exists, false otherwise
+};
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
   if (!isAuthenticated()) {
-    return <Navigate to="/auth/login" replace />
+    return <Navigate to="/auth/login" replace />;
   }
-  return children
-}
+  return children;
+};
 
 export const router = createBrowserRouter([
   {
@@ -74,12 +79,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "register",
-        element: <SiswaPage />,
+        element: <RegisterPage />,
       },
     ],
   },
-])
+]);
 
 export default function Router() {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }
