@@ -57,9 +57,9 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Carousel */}
-        <div className="hidden md:block">
+        <div className="hidden md:block col-span-2 p-4">
           <Carousel
             autoplay
             className="bg-white rounded-lg shadow-lg overflow-hidden"
@@ -79,8 +79,12 @@ const LoginPage = () => {
         </div>
 
         {/* Login Form */}
-        <div className="flex items-center justify-center">
-          <Card title="Masuk" style={{ width: 300, height: "100%" }}>
+        <div className="flex items-center justify-center p-4">
+          <Card
+            className="bg-white shadow-lg rounded-lg"
+            title="Masuk"
+            style={{ width: "100%", height: "100%" }}
+          >
             <Form
               name="normal_login"
               initialValues={{ remember: true }}
