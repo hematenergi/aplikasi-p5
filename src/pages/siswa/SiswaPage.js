@@ -165,6 +165,7 @@ function SiswaPage() {
                 placeholder="Pilih Sekolah"
                 optionFilterProp="children"
                 loading={loading}
+                defaultValue={localStorage.getItem("school_id")}
               >
                 {loading ? (
                   <Option key="loading" value="loading" disabled>

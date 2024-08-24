@@ -21,6 +21,7 @@ function AuthLayout() {
     // For example: clear local storage, redirect to login page, etc.
     localStorage.removeItem("token");
     localStorage.removeItem("school_id");
+    localStorage.removeItem("school_name");
     localStorage.removeItem("type");
     navigate("/auth/login");
   };
