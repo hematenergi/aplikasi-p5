@@ -90,7 +90,7 @@ function App() {
         `}
       >
         <button onClick={() => openInstagram("hemat_energi")}>
-          &copy; 2024 Sama Cipta Teknologi
+          &copy; {new Date().getFullYear()} Sama Cipta Teknologi
         </button>
       </footer>
     </Layout>
