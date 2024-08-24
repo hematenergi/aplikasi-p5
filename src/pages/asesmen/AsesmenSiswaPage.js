@@ -1,9 +1,19 @@
-import { Button, Form, Input, Layout, Select, notification, Spin } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Layout,
+  Select,
+  notification,
+  Typography,
+  Spin,
+} from "antd";
 import React, { useState, useEffect } from "react";
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
 import formJson from "../../scripts/formAsesmenSiswa.json";
 import "./../../App.css";
 import { baseUrl } from "../../constant/url";
+const { Title } = Typography;
 
 const { Content } = Layout;
 
@@ -36,17 +46,29 @@ function AsesmenSiswaPage() {
     });
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, dataDb) => {
     setLoadingSubmit(true);
     console.log(">>> Here is the data", data);
     console.log(">>> Here are the errors!!!", methods.formState.errors);
     await methods.submitToGoogleForms(data);
     console.log(methods, "methods");
-    setTimeout(() => {
-      setLoadingSubmit(false);
-      openNotification("topRight", "Datamu berhasil di submit!");
-      form.resetFields();
-    }, 1000);
+
+    try {
+      const response = await fetch(`${baseUrl}/asesmen-siswa`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(dataDb),
+      });
+
+      setTimeout(() => {
+        setLoadingSubmit(false);
+        openNotification("topRight", "Datamu berhasil di submit!");
+        form.resetFields();
+      }, 1000);
+    } catch (error) {}
   };
   const onFinish = (event) => {
     // console.log(event, "event")
@@ -55,7 +77,7 @@ function AsesmenSiswaPage() {
     console.log(values, "values");
 
     let body = {
-      1958881053: values.Sekolah,
+      1958881053: values.school_id,
       940569363: values.Siswa,
       1872189327: values.Kelompok,
       1413700900: values.Project,
@@ -65,24 +87,49 @@ function AsesmenSiswaPage() {
       1015687652: values.Mencoba,
       1196586704: values.Komunikasi,
     };
+
+    let bodyDb = {
+      sekolah_id: values.school_id,
+      nama_siswa: values.Siswa,
+      nama_kelompok: values.Kelompok,
+      project: values.Project,
+      aspek_mengamati: values.Mengamati,
+      aspek_menanya: values.Menanya,
+      aspek_menalar: values.Menalar,
+      aspek_mencoba: values.Mencoba,
+      aspek_mengkomunikasikan: values.Komunikasi,
+      skor_rata_rata:
+        (values.Mengamati +
+          values.Menanya +
+          values.Menalar +
+          values.Mencoba +
+          values.Komunikasi) /
+        5,
+    };
     // console.log(body, "body")
 
-    methods.handleSubmit(onSubmit(body));
+    methods.handleSubmit(onSubmit(body, bodyDb));
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataKelompok, setDataKelompok] = useState([]);
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${baseUrl}/schools/${localStorage.getItem("school_id")}`)
+    fetch(
+      `${baseUrl}/kelompok?school_id=${localStorage.getItem("school_id")}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
-        setData(data.data); // Assuming the data is an array of objects
+        setDataKelompok(data.data); // Assuming the data is an array of objects
         setLoading(false);
       })
       .catch((error) => {
@@ -90,6 +137,31 @@ function AsesmenSiswaPage() {
         setLoading(false);
       });
   }, []);
+
+  const [project, setproject] = useState([]);
+  const handleKelompokChange = (value) => {
+    let selectedKelompok = dataKelompok.find(
+      (item) => item.nama_kelompok === value
+    );
+
+    const projects = [
+      {
+        judul: selectedKelompok.judul_project_1,
+        tema: "Project 1 : " + selectedKelompok.tema_project_1,
+      },
+      {
+        judul: selectedKelompok.judul_project_2,
+        tema: "Project 1 : " + selectedKelompok.tema_project_2,
+      },
+      {
+        judul: selectedKelompok.judul_project_3,
+        tema: "Project 1 : " + selectedKelompok.tema_project_3,
+      },
+    ];
+
+    setproject(projects);
+    // get form.item Kelompok
+  };
 
   return (
     <Layout className="min-h-screen">
@@ -103,63 +175,15 @@ function AsesmenSiswaPage() {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            initialValues={{
+              school_id: localStorage.getItem("school_id"),
+            }}
           >
-            <Form.Item
-              name="school_id"
-              label="Pilih Sekolah"
-              rules={[
-                { required: true, message: "Please input your Schools!" },
-              ]}
-            >
-              <Select
-                placeholder="Pilih Sekolah"
-                optionFilterProp="children"
-                loading={loading}
-                defaultValue={localStorage.getItem("school_id")}
-              >
-                {loading ? (
-                  <Option key="loading" value="loading" disabled>
-                    <Spin />
-                  </Option>
-                ) : (
-                  data && (
-                    // data.map((item) => (
-                    <Option key={data.id} value={data.id}>
-                      {data.name}
-                    </Option>
-                  )
-                  // ))
-                )}
-              </Select>
-            </Form.Item>
-            {/* <Form.Item
-              name="Sekolah"
-              label="Pilih Sekolah"
-              rules={[
-                {
-                  required: true,
-                  message: "Pilih sekolah wajib diisi!",
-                },
-              ]}
-            >
-              <Select placeholder="Pilih Sekolah berikut" allowClear>
-                <Option value="Sekolah 1">Sekolah 1</Option>
-                <Option value="Sekolah 2">Sekolah 2</Option>
-                <Option value="Sekolah 3">Sekolah 3</Option>
-              </Select>
-            </Form.Item> */}
-
-            <Form.Item
-              name="Siswa"
-              label="Nama Siswa"
-              rules={[
-                {
-                  required: true,
-                  message: "Nama Siswa wajib diisi!",
-                },
-              ]}
-            >
-              <Input placeholder="Masukkan nama Siswa" />
+            <Title level={2}>
+              Asesmen Siswa : {localStorage.getItem("school_name")}
+            </Title>
+            <Form.Item name="school_id">
+              <Input type="hidden" />
             </Form.Item>
 
             <Form.Item
@@ -172,9 +196,27 @@ function AsesmenSiswaPage() {
                 },
               ]}
             >
-              <Input placeholder="Masukkan nama kelompok dengan format sbb. contoh :'Kelas 10 Kelompok 1'" />
+              <Select
+                placeholder="Pilih Kelompok"
+                optionFilterProp="children"
+                loading={loading}
+                onChange={handleKelompokChange}
+              >
+                {loading ? (
+                  <Option key="loading" value="loading" disabled>
+                    <Spin />
+                  </Option>
+                ) : (
+                  dataKelompok &&
+                  dataKelompok.map((item, index) => (
+                    <Option key={index} value={item.nama_kelompok}>
+                      {item.nama_kelompok}
+                    </Option>
+                  ))
+                )}
+              </Select>
+              {/* <Input placeholder="Masukkan nama kelompok dengan format sbb. contoh :'Kelas 10 Kelompok 1'" /> */}
             </Form.Item>
-
             <Form.Item
               name="Project"
               label="Pilih Project"
@@ -185,13 +227,30 @@ function AsesmenSiswaPage() {
                 },
               ]}
             >
-              <Select placeholder="Pilih Project" allowClear>
-                {formJson.fields
-                  .find((field) => field.label === "Pilih Project")
-                  .options.map((option) => (
-                    <Option value={option.label}>{option.label}</Option>
-                  ))}
+              <Select placeholder="Select a project">
+                {project.map((project, index) => (
+                  <Option
+                    key={index}
+                    value={`${project.tema}<>${project.judul}`}
+                    label={`${project.tema} - ${project.judul}`}
+                  >
+                    {`${project.tema} - ${project.judul}`}
+                  </Option>
+                ))}
               </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="Siswa"
+              label="Nama Siswa"
+              rules={[
+                {
+                  required: true,
+                  message: "Nama Siswa wajib diisi!",
+                },
+              ]}
+            >
+              <Input placeholder="Masukkan nama Siswa" />
             </Form.Item>
 
             <Form.Item

@@ -1,4 +1,12 @@
-import { Button, Form, Input, Layout, Select, notification, Spin } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Layout,
+  Select,
+  notification,
+  Typography,
+} from "antd";
 import React, { useState, useEffect } from "react";
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
 import { Dimensions, Elements, Subelements, Themes } from "../../data/Data";
@@ -8,6 +16,7 @@ import { baseUrl } from "../../constant/url";
 
 const { Content } = Layout;
 const { TextArea } = Input;
+const { Title } = Typography;
 
 const contentStyle = {
   flex: 1,
@@ -124,22 +133,22 @@ function SiswaPage() {
     }
   };
 
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [data, setData] = useState([]);
+  // const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${baseUrl}/schools/${localStorage.getItem("school_id")}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data.data); // Assuming the data is an array of objects
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch(`${baseUrl}/schools/${localStorage.getItem("school_id")}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setData(data.data); // Assuming the data is an array of objects
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   return (
     <Layout className="min-h-screen">
@@ -153,51 +162,17 @@ function SiswaPage() {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            initialValues={{
+              school_id: localStorage.getItem("school_id"),
+            }}
           >
-            <Form.Item
-              name="school_id"
-              label="Pilih Sekolah"
-              rules={[
-                { required: true, message: "Please input your Schools!" },
-              ]}
-            >
-              <Select
-                placeholder="Pilih Sekolah"
-                optionFilterProp="children"
-                loading={loading}
-                defaultValue={localStorage.getItem("school_id")}
-              >
-                {loading ? (
-                  <Option key="loading" value="loading" disabled>
-                    <Spin />
-                  </Option>
-                ) : (
-                  data && (
-                    // data.map((item) => (
-                    <Option key={data.id} value={data.id}>
-                      {data.name}
-                    </Option>
-                  )
-                  // ))
-                )}
-              </Select>
+            <Title level={2}>
+              Form Siswa : {localStorage.getItem("school_name")}
+            </Title>
+
+            <Form.Item name="school_id">
+              <Input type="hidden" />
             </Form.Item>
-            {/* <Form.Item
-              name="Sekolah"
-              label="Pilih Sekolah"
-              rules={[
-                {
-                  required: true,
-                  message: "Pilih Sekolah wajib diisi!",
-                },
-              ]}
-            >
-              <Select placeholder="Pilih Sekolah berikut" allowClear>
-                <Option value="Sekolah 1">Sekolah 1</Option>
-                <Option value="Sekolah 2">Sekolah 2</Option>
-                <Option value="Sekolah 3">Sekolah 3</Option>
-              </Select>
-            </Form.Item> */}
 
             <Form.Item
               name="Kelompok"
