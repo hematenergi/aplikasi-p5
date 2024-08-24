@@ -1,28 +1,39 @@
-import { Button, Form, Input, Layout, Select, notification } from "antd"
-import React, { useState } from "react"
-import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks"
-import formJson from "../../scripts/formAsesmenKelompok.json"
-import "./../../App.css"
+import {
+  Button,
+  Form,
+  Input,
+  Layout,
+  Select,
+  notification,
+  Typography,
+  Spin,
+} from "antd";
+import React, { useState, useEffect } from "react";
+import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
+import formJson from "../../scripts/formAsesmenKelompok.json";
+import "./../../App.css";
+import { baseUrl } from "../../constant/url";
 
-const { Content } = Layout
+const { Content } = Layout;
+const { Title } = Typography;
 
 const contentStyle = {
   flex: 1,
   justifyContent: "center",
   aliginItems: "center",
   padding: "20px",
-}
+};
 
-console.log(formJson, "formJson")
+console.log(formJson, "formJson");
 
-const { Option } = Select
+const { Option } = Select;
 
 function AsesmenKelompokPage() {
-  const [form] = Form.useForm()
-  const [api, contextHolder] = notification.useNotification()
-  const methods = useGoogleForm({ form: formJson })
+  const [form] = Form.useForm();
+  const [api, contextHolder] = notification.useNotification();
+  const methods = useGoogleForm({ form: formJson });
 
-  const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const openNotification = (
     placement,
@@ -32,26 +43,38 @@ function AsesmenKelompokPage() {
       message: `Notifikasi`,
       description,
       placement,
-    })
-  }
+    });
+  };
 
-  const onSubmit = async (data) => {
-    setLoadingSubmit(true)
-    console.log(">>> Here is the data", data)
-    console.log(">>> Here are the errors!!!", methods.formState.errors)
-    await methods.submitToGoogleForms(data)
-    console.log(methods, "methods")
-    setTimeout(() => {
-      setLoadingSubmit(false)
-      openNotification("topRight", "Datamu berhasil di submit!")
-      form.resetFields()
-    }, 1000)
-  }
+  const onSubmit = async (data, dataDb) => {
+    setLoadingSubmit(true);
+    console.log(">>> Here is the data", data);
+    console.log(">>> Here are the errors!!!", methods.formState.errors);
+    await methods.submitToGoogleForms(data);
+    console.log(methods, "methods");
+
+    try {
+      const response = await fetch(`${baseUrl}/asesmen-kelompok`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(dataDb),
+      });
+
+      setTimeout(() => {
+        setLoadingSubmit(false);
+        openNotification("topRight", "Datamu berhasil di submit!");
+        form.resetFields();
+      }, 1000);
+    } catch (error) {}
+  };
   const onFinish = (event) => {
     // console.log(event, "event")
 
-    const values = form.getFieldsValue()
-    console.log(values, "values")
+    const values = form.getFieldsValue();
+    console.log(values, "values");
 
     let body = {
       603839408: values.Sekolah,
@@ -59,14 +82,48 @@ function AsesmenKelompokPage() {
       513432574: values.Nilai1,
       975129844: values.Nilai2,
       818293731: values.Nilai3,
-    }
+    };
+
+    let bodyDb = {
+      sekolah_id: values.school_id,
+      nama_kelompok: values.Kelompok,
+      nilai_project_1: values.Nilai1,
+      nilai_project_2: values.Nilai2,
+      nilai_project_3: values.Nilai3,
+      nilai_akhir: 0,
+      kriteria: 0,
+    };
     // console.log(body, "body")
 
-    methods.handleSubmit(onSubmit(body))
-  }
+    methods.handleSubmit(onSubmit(body, bodyDb));
+  };
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo)
-  }
+    console.log("Failed:", errorInfo);
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [dataKelompok, setDataKelompok] = useState([]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(
+      `${baseUrl}/kelompok?school_id=${localStorage.getItem("school_id")}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setDataKelompok(data.data); // Assuming the data is an array of objects
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Layout className="min-h-screen">
@@ -80,22 +137,15 @@ function AsesmenKelompokPage() {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            initialValues={{
+              school_id: localStorage.getItem("school_id"),
+            }}
           >
-            <Form.Item
-              name="Sekolah"
-              label="Pilih Sekolah"
-              rules={[
-                {
-                  required: true,
-                  message: "Pilih sekolah wajib diisi!",
-                },
-              ]}
-            >
-              <Select placeholder="Pilih Sekolah berikut" allowClear>
-                <Option value="Sekolah 1">Sekolah 1</Option>
-                <Option value="Sekolah 2">Sekolah 2</Option>
-                <Option value="Sekolah 3">Sekolah 3</Option>
-              </Select>
+            <Title level={2}>
+              Asesmen Siswa : {localStorage.getItem("school_name")}
+            </Title>
+            <Form.Item name="school_id">
+              <Input type="hidden" />
             </Form.Item>
 
             <Form.Item
@@ -108,7 +158,24 @@ function AsesmenKelompokPage() {
                 },
               ]}
             >
-              <Input placeholder="Masukkan nama kelompok dengan format sbb. contoh :'Kelas 10 Kelompok 1'" />
+              <Select
+                placeholder="Pilih Kelompok"
+                optionFilterProp="children"
+                loading={loading}
+              >
+                {loading ? (
+                  <Option key="loading" value="loading" disabled>
+                    <Spin />
+                  </Option>
+                ) : (
+                  dataKelompok &&
+                  dataKelompok.map((item, index) => (
+                    <Option key={index} value={item.nama_kelompok}>
+                      {item.nama_kelompok}
+                    </Option>
+                  ))
+                )}
+              </Select>
             </Form.Item>
 
             <Form.Item
@@ -164,7 +231,7 @@ function AsesmenKelompokPage() {
         </GoogleFormProvider>
       </Content>
     </Layout>
-  )
+  );
 }
 
-export default AsesmenKelompokPage
+export default AsesmenKelompokPage;

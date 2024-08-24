@@ -215,7 +215,6 @@ function AsesmenSiswaPage() {
                   ))
                 )}
               </Select>
-              {/* <Input placeholder="Masukkan nama kelompok dengan format sbb. contoh :'Kelas 10 Kelompok 1'" /> */}
             </Form.Item>
             <Form.Item
               name="Project"
