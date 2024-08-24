@@ -9,7 +9,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./App.css"
 import { convertToTitleCase, openInstagram } from "./utils/helper"
 
-function App() {
+function AuthLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   console.log(location, "location")
@@ -47,31 +47,14 @@ function App() {
         text-center
       `}
       >
-        <div className="flex items-center">
-          {canGoBack && (
-            <Button className="mr-4" onClick={() => navigate(-1)}>
-              <ArrowLeftOutlined />
-              Kembali
-            </Button>
-          )}
-          <img
-            alt="-"
-            className={canGoBack ? "hidden md:block" : ""}
-            width={200}
-            src={require("./assets/img/merdeka.png")}
-          />
-        </div>
+        <img
+          alt="-"
+          className={canGoBack ? "hidden md:block" : ""}
+          width={200}
+          src={require("./assets/img/merdeka.png")}
+        />
 
-        <div className="flex items-center">
-          {canGoBack && (
-            <div className="text-md font-semibold mr-4">
-              Form {convertToTitleCase(location.pathname)}
-            </div>
-          )}
-          <Dropdown overlay={menu} placement="bottomRight" arrow>
-            <Button icon={<UserOutlined />} />
-          </Dropdown>
-        </div>
+        <div className="text-md font-semibold mr-4">Aplikasi Kegiatan P5</div>
       </div>
 
       <main>
@@ -97,4 +80,4 @@ function App() {
   )
 }
 
-export default App
+export default AuthLayout

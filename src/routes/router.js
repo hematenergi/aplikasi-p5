@@ -7,6 +7,7 @@ import { ErrorPage } from "../pages/error/ErrorPage"
 import { Home } from "../pages/Home/Home"
 import SiswaPage from "../pages/siswa/SiswaPage"
 import LoginPage from "../pages/auth/Login"
+import AuthLayout from "../AuthLayout"
 
 // Assuming you have a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -64,7 +65,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "auth",
-    element: <App />,
+    element: <AuthLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
