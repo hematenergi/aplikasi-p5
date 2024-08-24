@@ -1,17 +1,17 @@
-import React, { useState } from "react"
-import { Form, Input, Button, Card, message, Carousel } from "antd"
-import { UserOutlined, LockOutlined } from "@ant-design/icons"
-import { Link, useNavigate } from "react-router-dom"
-import { baseUrl } from "../../constant/url"
+import React, { useState } from "react";
+import { Form, Input, Button, Card, message, Carousel } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { baseUrl } from "../../constant/url";
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    console.log(JSON.stringify(values), "values")
+    console.log(JSON.stringify(values), "values");
 
-    setLoading(true)
+    setLoading(true);
     try {
       // Replace this with your actual login API call
       const response = await fetch(`${baseUrl}/login`, {
@@ -20,26 +20,27 @@ const LoginPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      })
+      });
 
       if (response.ok) {
-        const data = await response.json()
-        localStorage.setItem("token", data.token)
-        message.success("Login successful")
-        navigate("/") // Redirect to home page
+        const data = await response.json();
+
+        localStorage.setItem("token", data.data.token);
+        message.success("Login successful");
+        navigate("/"); // Redirect to home page
       } else {
-        throw new Error("Login failed")
+        throw new Error("Login failed");
       }
     } catch (error) {
-      message.error("Login failed. Please try again.")
+      message.error("Login failed. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const onChange = (currentSlide) => {
-    console.log(currentSlide)
-  }
+    console.log(currentSlide);
+  };
   const carouselImages = [
     {
       src: "https://images.unsplash.com/photo-1666184845325-954301a3375f?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -53,7 +54,7 @@ const LoginPage = () => {
       src: "https://images.unsplash.com/photo-1629129857796-19c079d2280b?q=80&w=1477&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Indonesian school building",
     },
-  ]
+  ];
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center bg-gray-100">
@@ -135,7 +136,7 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

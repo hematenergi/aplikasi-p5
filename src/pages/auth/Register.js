@@ -57,7 +57,7 @@ const RegisterPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.data.token);
         message.success("Login successful");
         navigate("/"); // Redirect to home page
       } else {
