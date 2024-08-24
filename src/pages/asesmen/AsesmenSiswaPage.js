@@ -1,28 +1,29 @@
-import { Button, Form, Input, Layout, Select, notification } from "antd"
-import React, { useState } from "react"
-import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks"
-import formJson from "../../scripts/formAsesmenSiswa.json"
-import "./../../App.css"
+import { Button, Form, Input, Layout, Select, notification, Spin } from "antd";
+import React, { useState, useEffect } from "react";
+import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
+import formJson from "../../scripts/formAsesmenSiswa.json";
+import "./../../App.css";
+import { baseUrl } from "../../constant/url";
 
-const { Content } = Layout
+const { Content } = Layout;
 
 const contentStyle = {
   flex: 1,
   justifyContent: "center",
   aliginItems: "center",
   padding: "20px",
-}
+};
 
-console.log(formJson, "formJson")
+console.log(formJson, "formJson");
 
-const { Option } = Select
+const { Option } = Select;
 
 function AsesmenSiswaPage() {
-  const [form] = Form.useForm()
-  const [api, contextHolder] = notification.useNotification()
-  const methods = useGoogleForm({ form: formJson })
+  const [form] = Form.useForm();
+  const [api, contextHolder] = notification.useNotification();
+  const methods = useGoogleForm({ form: formJson });
 
-  const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const openNotification = (
     placement,
@@ -32,26 +33,26 @@ function AsesmenSiswaPage() {
       message: `Notifikasi`,
       description,
       placement,
-    })
-  }
+    });
+  };
 
   const onSubmit = async (data) => {
-    setLoadingSubmit(true)
-    console.log(">>> Here is the data", data)
-    console.log(">>> Here are the errors!!!", methods.formState.errors)
-    await methods.submitToGoogleForms(data)
-    console.log(methods, "methods")
+    setLoadingSubmit(true);
+    console.log(">>> Here is the data", data);
+    console.log(">>> Here are the errors!!!", methods.formState.errors);
+    await methods.submitToGoogleForms(data);
+    console.log(methods, "methods");
     setTimeout(() => {
-      setLoadingSubmit(false)
-      openNotification("topRight", "Datamu berhasil di submit!")
-      form.resetFields()
-    }, 1000)
-  }
+      setLoadingSubmit(false);
+      openNotification("topRight", "Datamu berhasil di submit!");
+      form.resetFields();
+    }, 1000);
+  };
   const onFinish = (event) => {
     // console.log(event, "event")
 
-    const values = form.getFieldsValue()
-    console.log(values, "values")
+    const values = form.getFieldsValue();
+    console.log(values, "values");
 
     let body = {
       1958881053: values.Sekolah,
@@ -63,14 +64,32 @@ function AsesmenSiswaPage() {
       1957221483: values.Menalar,
       1015687652: values.Mencoba,
       1196586704: values.Komunikasi,
-    }
+    };
     // console.log(body, "body")
 
-    methods.handleSubmit(onSubmit(body))
-  }
+    methods.handleSubmit(onSubmit(body));
+  };
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo)
-  }
+    console.log("Failed:", errorInfo);
+  };
+
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [dataKelompok, setDataKelompok] = useState([]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${baseUrl}/schools`)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data.data.data); // Assuming the data is an array of objects
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Layout className="min-h-screen">
@@ -86,6 +105,32 @@ function AsesmenSiswaPage() {
             autoComplete="off"
           >
             <Form.Item
+              name="school_id"
+              label="Pilih Sekolah"
+              rules={[
+                { required: true, message: "Please input your Schools!" },
+              ]}
+            >
+              <Select
+                placeholder="Pilih Sekolah"
+                optionFilterProp="children"
+                loading={loading}
+              >
+                {loading ? (
+                  <Option key="loading" value="loading" disabled>
+                    <Spin />
+                  </Option>
+                ) : (
+                  data &&
+                  data.map((item) => (
+                    <Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Option>
+                  ))
+                )}
+              </Select>
+            </Form.Item>
+            {/* <Form.Item
               name="Sekolah"
               label="Pilih Sekolah"
               rules={[
@@ -100,7 +145,7 @@ function AsesmenSiswaPage() {
                 <Option value="Sekolah 2">Sekolah 2</Option>
                 <Option value="Sekolah 3">Sekolah 3</Option>
               </Select>
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               name="Siswa"
@@ -226,7 +271,7 @@ function AsesmenSiswaPage() {
         </GoogleFormProvider>
       </Content>
     </Layout>
-  )
+  );
 }
 
-export default AsesmenSiswaPage
+export default AsesmenSiswaPage;

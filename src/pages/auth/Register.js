@@ -58,6 +58,8 @@ const RegisterPage = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.data.token);
+        localStorage.setItem("school_id", data.data.school_id);
+        localStorage.setItem("type", data.data.type);
         message.success("Login successful");
         navigate("/"); // Redirect to home page
       } else {

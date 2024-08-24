@@ -129,10 +129,10 @@ function SiswaPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${baseUrl}/schools`)
+    fetch(`${baseUrl}/schools/${localStorage.getItem("school_id")}`)
       .then((response) => response.json())
       .then((data) => {
-        setData(data.data.data); // Assuming the data is an array of objects
+        setData(data.data); // Assuming the data is an array of objects
         setLoading(false);
       })
       .catch((error) => {
@@ -171,12 +171,13 @@ function SiswaPage() {
                     <Spin />
                   </Option>
                 ) : (
-                  data &&
-                  data.map((item) => (
-                    <Option key={item.id} value={item.id}>
-                      {item.name}
+                  data && (
+                    // data.map((item) => (
+                    <Option key={data.id} value={data.id}>
+                      {data.name}
                     </Option>
-                  ))
+                  )
+                  // ))
                 )}
               </Select>
             </Form.Item>
