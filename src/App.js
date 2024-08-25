@@ -1,8 +1,4 @@
-import {
-  ArrowLeftOutlined,
-  LogoutOutlined,
-  UserOutlined,
-} from "@ant-design/icons"
+import { ArrowLeftOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons"
 import { Button, Dropdown, Layout, Menu } from "antd"
 import React from "react"
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
@@ -25,9 +21,9 @@ function App() {
 
   const menu = (
     <Menu>
-      <Menu.Item key="1" icon={<UserOutlined />}>
+      {/* <Menu.Item key="1" icon={<UserOutlined />}>
         Profile
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key="2" icon={<LogoutOutlined />} onClick={handleLogout}>
         Logout
       </Menu.Item>
@@ -45,8 +41,7 @@ function App() {
         lg:p-4 p-2
         flex justify-between items-center
         text-center
-      `}
-      >
+      `}>
         <div className="flex items-center">
           {canGoBack && (
             <Button className="mr-4" onClick={() => navigate(-1)}>
@@ -87,8 +82,7 @@ function App() {
           text-center
           bg-footerColor
           text-white
-        `}
-      >
+        `}>
         <button onClick={() => openInstagram("hemat_energi")}>
           &copy; {new Date().getFullYear()} Sama Cipta Teknologi
         </button>

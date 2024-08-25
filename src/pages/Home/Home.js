@@ -1,9 +1,11 @@
-import React from "react"
-import { Button } from "../../components/Button"
-import { useNavigate } from "react-router-dom"
+import React from "react";
+import { Button } from "../../components/Button";
+import { useNavigate } from "react-router-dom";
+import { getRoleName, roleName } from "../../utils/helper";
 
 export const Home = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   return (
     <div className="text-center flex flex-col items-center justify-center h-[calc(100vh-200px)]">
       <div className="absolute z-0 bg-image h-screen w-full bg-blend-overlay" />
@@ -20,17 +22,24 @@ export const Home = () => {
         <br />
       </div>
 
-      <div className="grid grid-rows-1 md:grid-cols-3 lg:grid-cols-3 gap-5 z-10">
-        <Button label={"Form Siswa"} onClick={() => navigate("siswa")} />
-        <Button
-          label={"Form Asesmen Siswa"}
-          onClick={() => navigate("asesmen-siswa")}
-        />
-        <Button
-          label={"Form Asesmen Kelompok"}
-          onClick={() => navigate("asesmen-kelompok")}
-        />
+      <div className="grid grid-rows-1 md:grid-cols-2 lg:grid-cols-2 gap-5 z-10">
+        {roleName === "student" && (
+          <>
+            <Button label={"Form Siswa"} onClick={() => navigate("siswa")} />
+            <Button
+              label={"Download Template Essay"}
+              onClick={() => window.open("http://aplikasi-p5.site/Format-Essay-P5.docx", "_blank")}
+            />
+          </>
+        )}
+
+        {(roleName === "headmaster" || roleName === "teacher") && (
+          <>
+            <Button label={"Form Asesmen Siswa"} onClick={() => navigate("asesmen-siswa")} />
+            <Button label={"Form Asesmen Kelompok"} onClick={() => navigate("asesmen-kelompok")} />
+          </>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};

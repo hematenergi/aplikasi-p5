@@ -1,13 +1,9 @@
-import {
-  ArrowLeftOutlined,
-  LogoutOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Button, Dropdown, Layout, Menu } from "antd";
+import { LogoutOutlined } from "@ant-design/icons";
+import { Layout, Menu } from "antd";
 import React from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
-import { convertToTitleCase, openInstagram } from "./utils/helper";
+import { openInstagram } from "./utils/helper";
 
 function AuthLayout() {
   const navigate = useNavigate();
@@ -28,9 +24,9 @@ function AuthLayout() {
 
   const menu = (
     <Menu>
-      <Menu.Item key="1" icon={<UserOutlined />}>
+      {/* <Menu.Item key="1" icon={<UserOutlined />}>
         Profile
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key="2" icon={<LogoutOutlined />} onClick={handleLogout}>
         Logout
       </Menu.Item>
@@ -48,8 +44,7 @@ function AuthLayout() {
         lg:p-4 p-2
         flex justify-between items-center
         text-center
-      `}
-      >
+      `}>
         <img
           alt="-"
           className={canGoBack ? "hidden md:block" : ""}
@@ -73,8 +68,7 @@ function AuthLayout() {
           text-center
           bg-footerColor
           text-white
-        `}
-      >
+        `}>
         <button onClick={() => openInstagram("hemat_energi")}>
           &copy; {new Date().getFullYear()} Sama Cipta Teknologi
         </button>

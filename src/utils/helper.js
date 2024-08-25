@@ -27,3 +27,20 @@ export const openInstagram = (username) => {
   const url = `https://www.instagram.com/${username}/`
   window.open(url, "_blank")
 }
+
+export const getRoleName = (type) => {
+  switch (type) {
+    case "0":
+      return "admin"
+    case "1":
+      return "teacher"
+    case "2":
+      return "student"
+    case "3":
+      return "headmaster"
+    default:
+      return "unknown"
+  }
+}
+
+export const roleName = getRoleName(localStorage.getItem("type"))

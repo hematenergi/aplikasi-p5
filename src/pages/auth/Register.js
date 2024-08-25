@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Card,
-  message,
-  Carousel,
-  Select,
-  Spin,
-} from "antd";
+import { Form, Input, Button, Card, message, Carousel, Select, Spin } from "antd";
 import { UserOutlined, LockOutlined, NumberOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../../constant/url";
@@ -96,18 +87,11 @@ const RegisterPage = () => {
       <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Carousel */}
         <div className="hidden md:block col-span-2 p-4">
-          <Carousel
-            autoplay
-            className="bg-white rounded-lg shadow-lg overflow-hidden"
-          >
+          <Carousel autoplay className="bg-white rounded-lg shadow-lg overflow-hidden">
             {carouselImages.map((image, index) => (
               <div key={index}>
                 <div className="h-96 flex items-center justify-center bg-gray-200">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="object-cover w-full h-full"
-                  />
+                  <img src={image.src} alt={image.alt} className="object-cover w-full h-full" />
                 </div>
               </div>
             ))}
@@ -119,24 +103,12 @@ const RegisterPage = () => {
           <Card
             className="bg-white shadow-lg rounded-lg"
             title="Daftar"
-            style={{ width: "100%", height: "100%" }}
-          >
-            <Form
-              name="normal_login"
-              initialValues={{ remember: true }}
-              onFinish={onFinish}
-            >
+            style={{ width: "100%", height: "100%" }}>
+            <Form name="normal_login" initialValues={{ remember: true }} onFinish={onFinish}>
               <Form.Item
                 name="school_id"
-                rules={[
-                  { required: true, message: "Please input your Schools!" },
-                ]}
-              >
-                <Select
-                  placeholder="Pilih Sekolah"
-                  optionFilterProp="children"
-                  loading={loading}
-                >
+                rules={[{ required: true, message: "Please input your Schools!" }]}>
+                <Select placeholder="Pilih Sekolah" optionFilterProp="children" loading={loading}>
                   {loading ? (
                     <Option key="loading" value="loading" disabled>
                       <Spin />
@@ -153,8 +125,7 @@ const RegisterPage = () => {
               </Form.Item>
               <Form.Item
                 name="type"
-                rules={[{ required: true, message: "Please input your type!" }]}
-              >
+                rules={[{ required: true, message: "Please input your type!" }]}>
                 <Select
                   showSearch
                   placeholder="Daftar Sebagai"
@@ -180,31 +151,23 @@ const RegisterPage = () => {
                       required: nipRequired,
                       message: "Please input your Nip!",
                     },
-                  ]}
-                >
+                  ]}>
                   <Input prefix={<NumberOutlined />} placeholder="Nip" />
                 </Form.Item>
               )}
               <Form.Item
                 name="name"
-                rules={[{ required: true, message: "Please input your Name!" }]}
-              >
+                rules={[{ required: true, message: "Please input your Name!" }]}>
                 <Input prefix={<UserOutlined />} placeholder="Nama" />
               </Form.Item>
               <Form.Item
                 name="email"
-                rules={[
-                  { required: true, message: "Please input your Email!" },
-                ]}
-              >
+                rules={[{ required: true, message: "Please input your Email!" }]}>
                 <Input prefix={<UserOutlined />} placeholder="Email" />
               </Form.Item>
               <Form.Item
                 name="password"
-                rules={[
-                  { required: true, message: "Please input your Password!" },
-                ]}
-              >
+                rules={[{ required: true, message: "Please input your Password!" }]}>
                 <Input.Password
                   prefix={<LockOutlined />}
                   type="password"
@@ -217,8 +180,7 @@ const RegisterPage = () => {
                   type="primary"
                   htmlType="submit"
                   loading={loading}
-                  style={{ width: "100%" }}
-                >
+                  style={{ width: "100%" }}>
                   Log in
                 </Button>
               </Form.Item>
