@@ -3,6 +3,7 @@ import { Form, Input, Button, Card, message, Carousel } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../../constant/url";
+import { handleApiError } from "../../utils/customHooks";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
@@ -22,8 +23,9 @@ const LoginPage = () => {
         body: JSON.stringify(values),
       });
 
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
+        // const data = await response.json();
 
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("school_id", data.data.school_id);
@@ -32,10 +34,13 @@ const LoginPage = () => {
         message.success("Login successful");
         navigate("/"); // Redirect to home page
       } else {
-        throw new Error("Login failed");
+        const { message: msg, errors } = handleApiError(data);
+
+        message.error(msg || "Login failed. Please try again.");
       }
     } catch (error) {
-      message.error("Login failed. Please try again.");
+      // message.error("Login failed. Please try again.");
+      console.log(error, "error catch");
     } finally {
       setLoading(false);
     }

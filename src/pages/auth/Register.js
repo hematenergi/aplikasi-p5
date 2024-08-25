@@ -72,7 +72,7 @@ const RegisterPage = () => {
         });
 
         // Display general error message
-        message.error(msg || "Login failed. Please try again.");
+        message.error(msg || "Register failed. Please try again.");
       }
     } catch (error) {
       console.log(error, "error catch");
