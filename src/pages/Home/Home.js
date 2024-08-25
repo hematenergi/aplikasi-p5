@@ -6,6 +6,8 @@ import { getRoleName, roleName } from "../../utils/helper";
 export const Home = () => {
   const navigate = useNavigate();
 
+  console.log(roleName, "roleName");
+
   return (
     <div className="text-center flex flex-col items-center justify-center h-[calc(100vh-200px)]">
       <div className="absolute z-0 bg-image h-screen w-full bg-blend-overlay" />

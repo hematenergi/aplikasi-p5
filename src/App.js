@@ -1,23 +1,23 @@
-import { ArrowLeftOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons"
-import { Button, Dropdown, Layout, Menu } from "antd"
-import React from "react"
-import { Outlet, useLocation, useNavigate } from "react-router-dom"
-import "./App.css"
-import { convertToTitleCase, openInstagram } from "./utils/helper"
+import { ArrowLeftOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Layout, Menu } from "antd";
+import React from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import "./App.css";
+import { convertToTitleCase, openInstagram } from "./utils/helper";
 
 function App() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  console.log(location, "location")
-  const canGoBack = location.pathname !== "/"
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location, "location");
+  const canGoBack = location.pathname !== "/";
 
   const handleLogout = () => {
     // Implement your logout logic here
-    console.log("Logout clicked")
+    console.log("Logout clicked");
     // For example: clear local storage, redirect to login page, etc.
-    localStorage.removeItem("token")
-    navigate("/auth/login")
-  }
+    localStorage.clear();
+    navigate("/auth/login");
+  };
 
   const menu = (
     <Menu>
@@ -28,7 +28,7 @@ function App() {
         Logout
       </Menu.Item>
     </Menu>
-  )
+  );
 
   return (
     <Layout className="h-screen">
@@ -88,7 +88,7 @@ function App() {
         </button>
       </footer>
     </Layout>
-  )
+  );
 }
 
-export default App
+export default App;
