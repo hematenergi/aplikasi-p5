@@ -1,37 +1,12 @@
-import { LogoutOutlined } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import React from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import "./App.css";
 import { openInstagram } from "./utils/helper";
 
 function AuthLayout() {
-  const navigate = useNavigate();
   const location = useLocation();
-  console.log(location, "location");
   const canGoBack = location.pathname !== "/";
-
-  const handleLogout = () => {
-    // Implement your logout logic here
-    console.log("Logout clicked");
-    // For example: clear local storage, redirect to login page, etc.
-    localStorage.removeItem("token");
-    localStorage.removeItem("school_id");
-    localStorage.removeItem("school_name");
-    localStorage.removeItem("type");
-    navigate("/auth/login");
-  };
-
-  const menu = (
-    <Menu>
-      {/* <Menu.Item key="1" icon={<UserOutlined />}>
-        Profile
-      </Menu.Item> */}
-      <Menu.Item key="2" icon={<LogoutOutlined />} onClick={handleLogout}>
-        Logout
-      </Menu.Item>
-    </Menu>
-  );
 
   return (
     <Layout className="h-screen">
