@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Card, message, Carousel, Select, Spin } from "antd";
-import { UserOutlined, LockOutlined, NumberOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, NumberOutlined, MailOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../../constant/url";
+import { handleApiError } from "../../utils/customHooks";
 
 const { Option } = Select;
 
 const RegisterPage = () => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [type, setType] = useState("2");
@@ -46,27 +48,39 @@ const RegisterPage = () => {
         body: JSON.stringify(values),
       });
 
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem("school_id", data.data.school_id);
-        localStorage.setItem("school_name", data.data.school_name);
-        localStorage.setItem("type", data.data.type);
+        // const data = await response.json();
+        // localStorage.setItem("token", data.data.token);
+        // localStorage.setItem("school_id", data.data.school_id);
+        // localStorage.setItem("school_name", data.data.school_name);
+        // localStorage.setItem("type", data.data.type);
         message.success("Login successful");
-        navigate("/"); // Redirect to home page
+        navigate("auth/login"); // Redirect to home page
       } else {
-        throw new Error("Login failed");
+        console.log(data, "response error");
+        const { message: msg, errors } = handleApiError(data);
+
+        // Set form errors
+        Object.keys(errors).forEach((field) => {
+          form.setFields([
+            {
+              name: field,
+              errors: errors[field],
+            },
+          ]);
+        });
+
+        // Display general error message
+        message.error(msg || "Login failed. Please try again.");
       }
     } catch (error) {
-      message.error("Login failed. Please try again.");
+      console.log(error, "error catch");
     } finally {
       setLoading(false);
     }
   };
 
-  const onChange = (currentSlide) => {
-    console.log(currentSlide);
-  };
   const carouselImages = [
     {
       src: "https://images.unsplash.com/photo-1666184845325-954301a3375f?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -104,7 +118,13 @@ const RegisterPage = () => {
             className="bg-white shadow-lg rounded-lg"
             title="Daftar"
             style={{ width: "100%", height: "100%" }}>
-            <Form name="normal_login" initialValues={{ remember: true }} onFinish={onFinish}>
+            <Form
+              form={form}
+              name="normal_register"
+              initialValues={{
+                type: "2",
+              }}
+              onFinish={onFinish}>
               <Form.Item
                 name="school_id"
                 rules={[{ required: true, message: "Please input your Schools!" }]}>
@@ -163,7 +183,7 @@ const RegisterPage = () => {
               <Form.Item
                 name="email"
                 rules={[{ required: true, message: "Please input your Email!" }]}>
-                <Input prefix={<UserOutlined />} placeholder="Email" />
+                <Input prefix={<MailOutlined />} placeholder="Email" />
               </Form.Item>
               <Form.Item
                 name="password"
