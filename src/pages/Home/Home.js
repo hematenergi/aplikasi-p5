@@ -1,12 +1,21 @@
-import React from "react";
-import { Button } from "../../components/Button";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getRoleName, roleName } from "../../utils/helper";
+import { Button } from "../../components/Button";
+import { getRoleName } from "../../utils/helper";
 
 export const Home = () => {
   const navigate = useNavigate();
+  const [roleName, setRoleName] = useState("");
 
   console.log(roleName, "roleName");
+
+  useEffect(() => {
+    const role = getRoleName(localStorage.getItem("type"));
+
+    setRoleName(role);
+
+    return () => {};
+  }, []);
 
   return (
     <div className="text-center flex flex-col items-center justify-center h-[calc(100vh-200px)]">
