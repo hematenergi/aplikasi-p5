@@ -55,8 +55,8 @@ const RegisterPage = () => {
         // localStorage.setItem("school_id", data.data.school_id);
         // localStorage.setItem("school_name", data.data.school_name);
         // localStorage.setItem("type", data.data.type);
-        message.success("Login successful");
-        navigate("auth/login"); // Redirect to home page
+        message.success("Register successful");
+        navigate("/auth/login"); // Redirect to home page
       } else {
         console.log(data, "response error");
         const { message: msg, errors } = handleApiError(data);
@@ -201,7 +201,7 @@ const RegisterPage = () => {
                   htmlType="submit"
                   loading={loading}
                   style={{ width: "100%" }}>
-                  Log in
+                  Register
                 </Button>
               </Form.Item>
             </Form>
