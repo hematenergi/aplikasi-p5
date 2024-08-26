@@ -1,18 +1,11 @@
-import {
-  Button,
-  Form,
-  Input,
-  Layout,
-  Select,
-  notification,
-  Typography,
-} from "antd";
+import { Button, Form, Input, Layout, Select, notification, Typography } from "antd";
 import React, { useState, useEffect } from "react";
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
 import { Dimensions, Elements, Subelements, Themes } from "../../data/Data";
 import formJson from "../../scripts/formP5.json";
 import "./../../App.css";
 import { baseUrl } from "../../constant/url";
+import { handleApiError } from "../../utils/customHooks";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -43,7 +36,7 @@ function SiswaPage() {
 
   const openNotification = (
     placement,
-    description = "This is the content of the notification."
+    description = "This is the content of the notification.",
   ) => {
     api.success({
       message: `Notifikasi`,
@@ -63,6 +56,7 @@ function SiswaPage() {
       const response = await fetch(`${baseUrl}/form-siswa`, {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -164,11 +158,8 @@ function SiswaPage() {
             autoComplete="off"
             initialValues={{
               school_id: localStorage.getItem("school_id"),
-            }}
-          >
-            <Title level={2}>
-              Form Siswa : {localStorage.getItem("school_name")}
-            </Title>
+            }}>
+            <Title level={2}>Form Siswa : {localStorage.getItem("school_name")}</Title>
 
             <Form.Item name="school_id">
               <Input type="hidden" />
@@ -182,8 +173,7 @@ function SiswaPage() {
                   required: true,
                   message: "Nama Kelompok wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Input placeholder="Masukkan nama kelompok dengan format sbb. contoh :'Kelas 10 Kelompok 1'" />
             </Form.Item>
 
@@ -195,8 +185,7 @@ function SiswaPage() {
                   required: true,
                   message: "Pilih Dimensi wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 placeholder="Pilih dimensi berdasarkan pilihan yang tersedia"
                 allowClear
@@ -209,8 +198,7 @@ function SiswaPage() {
                     Elemen: "",
                     Subelemen: "",
                   });
-                }}
-              >
+                }}>
                 {Dimensions.map(({ id, label }, index, array) => {
                   return (
                     <Option key={index.toString()} value={id}>
@@ -230,8 +218,7 @@ function SiswaPage() {
                   required: true,
                   message: "Pilih Elemen wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 placeholder="Pilih elemen berdasarkan pilihan yang tersedia"
                 allowClear
@@ -242,17 +229,16 @@ function SiswaPage() {
                   form.setFieldsValue({
                     Subelemen: "",
                   });
-                }}
-              >
-                {Elements.filter(
-                  (element) => element.parent_id === selectedDimension
-                ).map(({ id, label }, index, array) => {
-                  return (
-                    <Option key={index.toString()} value={id}>
-                      {label}
-                    </Option>
-                  );
-                })}
+                }}>
+                {Elements.filter((element) => element.parent_id === selectedDimension).map(
+                  ({ id, label }, index, array) => {
+                    return (
+                      <Option key={index.toString()} value={id}>
+                        {label}
+                      </Option>
+                    );
+                  },
+                )}
               </Select>
             </Form.Item>
             {getDescription(Elements, selectedElement)}
@@ -265,24 +251,22 @@ function SiswaPage() {
                   required: true,
                   message: "Pilih Subelemen wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 placeholder="Pilih subelemen berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
                   setSelectedSubelement(value);
-                }}
-              >
-                {Subelements.filter(
-                  (element) => element.element_id === selectedElement
-                ).map(({ id, label }, index, array) => {
-                  return (
-                    <Option key={index.toString()} value={id}>
-                      {label}
-                    </Option>
-                  );
-                })}
+                }}>
+                {Subelements.filter((element) => element.element_id === selectedElement).map(
+                  ({ id, label }, index, array) => {
+                    return (
+                      <Option key={index.toString()} value={id}>
+                        {label}
+                      </Option>
+                    );
+                  },
+                )}
               </Select>
             </Form.Item>
             {getDescription(Subelements, selectedSubelement)}
@@ -295,15 +279,13 @@ function SiswaPage() {
                   required: true,
                   message: "Masukkan Tema 1 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 placeholder="Pilih tema berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
                   setSelectedTheme1(value);
-                }}
-              >
+                }}>
                 {Themes.map(({ id, label }, index, array) => {
                   return (
                     <Option key={index.toString()} value={id}>
@@ -323,8 +305,7 @@ function SiswaPage() {
                   required: true,
                   message: "Judul/Topik 1 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <TextArea
                 rows={2}
                 placeholder="Deskripsikan ide lengkapmu berdasarkan pilihan yang kamu pilih sebelumnya..."
@@ -338,15 +319,13 @@ function SiswaPage() {
                   required: true,
                   message: "Masukkan Tema 2 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 placeholder="Pilih tema berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
                   setSelectedTheme2(value);
-                }}
-              >
+                }}>
                 {Themes.map(({ id, label }, index, array) => {
                   return (
                     <Option key={index.toString()} value={id}>
@@ -366,8 +345,7 @@ function SiswaPage() {
                   required: true,
                   message: "Judul/Topik 2 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <TextArea
                 rows={2}
                 placeholder="Deskripsikan ide lengkapmu berdasarkan pilihan yang kamu pilih sebelumnya..."
@@ -381,15 +359,13 @@ function SiswaPage() {
                   required: true,
                   message: "Masukkan Tema 3 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 placeholder="Pilih tema berdasarkan pilihan yang tersedia"
                 allowClear
                 onChange={(value) => {
                   setSelectedTheme3(value);
-                }}
-              >
+                }}>
                 {Themes.map(({ id, label }, index, array) => {
                   return (
                     <Option key={index.toString()} value={id}>
@@ -409,8 +385,7 @@ function SiswaPage() {
                   required: true,
                   message: "Judul/Topik 3 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <TextArea
                 rows={2}
                 placeholder="Deskripsikan ide lengkapmu berdasarkan pilihan yang kamu pilih sebelumnya..."
@@ -422,8 +397,7 @@ function SiswaPage() {
                 loading={loadingSubmit}
                 type="primary"
                 htmlType="submit"
-                className="w-full lg:w-auto"
-              >
+                className="w-full lg:w-auto">
                 Kirim
               </Button>
             </Form.Item>
