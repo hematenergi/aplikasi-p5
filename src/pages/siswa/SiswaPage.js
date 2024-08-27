@@ -1,4 +1,4 @@
-import { Button, Form, Input, Layout, Select, notification, Typography } from "antd";
+import { Button, Form, Input, Layout, Select, notification, Typography, message } from "antd";
 import React, { useState, useEffect } from "react";
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
 import { Dimensions, Elements, Subelements, Themes } from "../../data/Data";
@@ -62,12 +62,33 @@ function SiswaPage() {
         },
         body: JSON.stringify(dataDb),
       });
+      const data = await response.json();
 
-      setTimeout(() => {
-        setLoadingSubmit(false);
-        openNotification("topRight", "Datamu berhasil di submit!");
-        form.resetFields();
-      }, 1000);
+      if (response.ok) {
+        setTimeout(() => {
+          openNotification("topRight", "Datamu berhasil di submit!");
+          form.resetFields();
+        }, 1000);
+      } else {
+        const { message: msg, errors } = handleApiError(data);
+        Object.keys(errors).forEach((field) => {
+          form.setFields([
+            {
+              name: field,
+              errors: errors[field],
+            },
+          ]);
+        });
+
+        // Display general error message
+        message.error(msg || "Register failed. Please try again.");
+      }
+      setLoadingSubmit(false);
+      // setTimeout(() => {
+      //   setLoadingSubmit(false);
+      //   openNotification("topRight", "Datamu berhasil di submit!");
+      //   form.resetFields();
+      // }, 1000);
     } catch (error) {}
   };
   const onFinish = (event) => {
@@ -83,32 +104,32 @@ function SiswaPage() {
 
     let body = {
       // 1614735276: values.Sekolah,
-      1614735276: values.school_id,
-      55847124: values.Kelompok,
-      1688946239: findLabelStringById(Dimensions, values.Dimensi),
-      1226875206: findLabelStringById(Elements, values.Elemen),
-      661708310: findLabelStringById(Subelements, values.Subelemen),
-      1168830625: findLabelStringById(Themes, values.Tema1),
-      800214939: values.Judul1,
-      1468357853: findLabelStringById(Themes, values.Tema2),
-      786338565: values.Judul2,
-      791492921: findLabelStringById(Themes, values.Tema2),
-      299652587: values.Judul2,
+      1614735276: values.sekolah_id,
+      55847124: values.nama_kelompok,
+      1688946239: findLabelStringById(Dimensions, values.dimensi),
+      1226875206: findLabelStringById(Elements, values.elemen),
+      661708310: findLabelStringById(Subelements, values.subelemen),
+      1168830625: findLabelStringById(Themes, values.tema_project_1),
+      800214939: values.judul_project_1,
+      1468357853: findLabelStringById(Themes, values.tema_project_2),
+      786338565: values.judul_project_2,
+      791492921: findLabelStringById(Themes, values.tema_project_3),
+      299652587: values.judul_project_3,
     };
     // console.log(body, "body")
 
     let bodyDb = {
-      sekolah_id: values.school_id,
-      nama_kelompok: values.Kelompok,
-      dimensi: findLabelStringById(Dimensions, values.Dimensi),
-      elemen: findLabelStringById(Elements, values.Elemen),
-      subelemen: findLabelStringById(Subelements, values.Subelemen),
-      tema_project_1: findLabelStringById(Themes, values.Tema1),
-      judul_project_1: values.Judul1,
-      tema_project_2: findLabelStringById(Themes, values.Tema2),
-      judul_project_2: values.Judul2,
-      tema_project_3: findLabelStringById(Themes, values.Tema3),
-      judul_project_3: values.Judul3,
+      sekolah_id: values.sekolah_id,
+      nama_kelompok: values.nama_kelompok,
+      dimensi: findLabelStringById(Dimensions, values.dimensi),
+      elemen: findLabelStringById(Elements, values.elemen),
+      subelemen: findLabelStringById(Subelements, values.subelemen),
+      tema_project_1: findLabelStringById(Themes, values.tema_project_1),
+      judul_project_1: values.judul_project_1,
+      tema_project_2: findLabelStringById(Themes, values.tema_project_2),
+      judul_project_2: values.judul_project_2,
+      tema_project_3: findLabelStringById(Themes, values.tema_project_3),
+      judul_project_3: values.judul_project_3,
     };
 
     methods.handleSubmit(onSubmit(body, bodyDb));
@@ -157,16 +178,16 @@ function SiswaPage() {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             initialValues={{
-              school_id: localStorage.getItem("school_id"),
+              sekolah_id: localStorage.getItem("school_id"),
             }}>
             <Title level={2}>Form Siswa : {localStorage.getItem("school_name")}</Title>
 
-            <Form.Item name="school_id">
+            <Form.Item name="sekolah_id">
               <Input type="hidden" />
             </Form.Item>
 
             <Form.Item
-              name="Kelompok"
+              name="nama_kelompok"
               label="Nama Kelompok"
               rules={[
                 {
@@ -178,7 +199,7 @@ function SiswaPage() {
             </Form.Item>
 
             <Form.Item
-              name="Dimensi"
+              name="dimensi"
               label="Pilih Dimensi"
               rules={[
                 {
@@ -211,7 +232,7 @@ function SiswaPage() {
             {getDescription(Dimensions, selectedDimension)}
 
             <Form.Item
-              name="Elemen"
+              name="elemen"
               label="Pilih Elemen"
               rules={[
                 {
@@ -244,7 +265,7 @@ function SiswaPage() {
             {getDescription(Elements, selectedElement)}
 
             <Form.Item
-              name="Subelemen"
+              name="subelemen"
               label="Pilih Subelemen"
               rules={[
                 {
@@ -272,12 +293,12 @@ function SiswaPage() {
             {getDescription(Subelements, selectedSubelement)}
 
             <Form.Item
-              name="Tema1"
+              name="tema_project_1"
               label="Masukkan Tema 1"
               rules={[
                 {
                   required: true,
-                  message: "Masukkan Tema 1 wajib diisi!",
+                  message: "Tema 1 wajib diisi!",
                 },
               ]}>
               <Select
@@ -298,7 +319,7 @@ function SiswaPage() {
             {getDescription(Themes, selectedTheme1)}
 
             <Form.Item
-              name="Judul1"
+              name="judul_project_1"
               label="Judul/Topik 1"
               rules={[
                 {
@@ -312,12 +333,12 @@ function SiswaPage() {
               />
             </Form.Item>
             <Form.Item
-              name="Tema2"
+              name="tema_project_2"
               label="Masukkan Tema 2"
               rules={[
                 {
                   required: true,
-                  message: "Masukkan Tema 2 wajib diisi!",
+                  message: "Tema 2 wajib diisi!",
                 },
               ]}>
               <Select
@@ -338,7 +359,7 @@ function SiswaPage() {
             {getDescription(Themes, selectedTheme2)}
 
             <Form.Item
-              name="Judul2"
+              name="judul_project_2"
               label="Judul/Topik 2"
               rules={[
                 {
@@ -352,12 +373,12 @@ function SiswaPage() {
               />
             </Form.Item>
             <Form.Item
-              name="Tema3"
+              name="tema_project_3"
               label="Masukkan Tema 3"
               rules={[
                 {
                   required: true,
-                  message: "Masukkan Tema 3 wajib diisi!",
+                  message: "Tema 3 wajib diisi!",
                 },
               ]}>
               <Select
@@ -378,7 +399,7 @@ function SiswaPage() {
             {getDescription(Themes, selectedTheme3)}
 
             <Form.Item
-              name="Judul3"
+              name="judul_project_3"
               label="Judul/Topik 3"
               rules={[
                 {

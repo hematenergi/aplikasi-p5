@@ -1,9 +1,10 @@
-import { Button, Form, Input, Layout, Select, notification, Typography, Spin } from "antd";
+import { Button, Form, Input, Layout, Select, notification, Typography, Spin, message } from "antd";
 import React, { useState, useEffect } from "react";
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
 import formJson from "../../scripts/formAsesmenKelompok.json";
 import "./../../App.css";
 import { baseUrl } from "../../constant/url";
+import { handleApiError } from "../../utils/customHooks";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -54,12 +55,34 @@ function AsesmenKelompokPage() {
         },
         body: JSON.stringify(dataDb),
       });
+      const data = await response.json();
 
-      setTimeout(() => {
-        setLoadingSubmit(false);
-        openNotification("topRight", "Datamu berhasil di submit!");
-        form.resetFields();
-      }, 1000);
+      if (response.ok) {
+        setTimeout(() => {
+          openNotification("topRight", "Datamu berhasil di submit!");
+          form.resetFields();
+        }, 1000);
+      } else {
+        const { message: msg, errors } = handleApiError(data);
+        Object.keys(errors).forEach((field) => {
+          form.setFields([
+            {
+              name: field,
+              errors: errors[field],
+            },
+          ]);
+        });
+
+        // Display general error message
+        message.error(msg || "Register failed. Please try again.");
+      }
+      setLoadingSubmit(false);
+
+      // setTimeout(() => {
+      //   setLoadingSubmit(false);
+      //   openNotification("topRight", "Datamu berhasil di submit!");
+      //   form.resetFields();
+      // }, 1000);
     } catch (error) {}
   };
   const onFinish = (event) => {
@@ -69,19 +92,19 @@ function AsesmenKelompokPage() {
     console.log(values, "values");
 
     let body = {
-      603839408: values.Sekolah,
-      1868919359: values.Kelompok,
-      513432574: values.Nilai1,
-      975129844: values.Nilai2,
-      818293731: values.Nilai3,
+      603839408: values.sekolah_id,
+      1868919359: values.nama_kelompok,
+      513432574: values.nilai_project_1,
+      975129844: values.nilai_project_2,
+      818293731: values.nilai_project_3,
     };
 
     let bodyDb = {
-      sekolah_id: values.school_id,
-      nama_kelompok: values.Kelompok,
-      nilai_project_1: values.Nilai1,
-      nilai_project_2: values.Nilai2,
-      nilai_project_3: values.Nilai3,
+      sekolah_id: values.sekolah_id,
+      nama_kelompok: values.nama_kelompok,
+      nilai_project_1: values.nilai_project_1,
+      nilai_project_2: values.nilai_project_2,
+      nilai_project_3: values.nilai_project_3,
       nilai_akhir: 0,
       kriteria: 0,
     };
@@ -127,15 +150,15 @@ function AsesmenKelompokPage() {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             initialValues={{
-              school_id: localStorage.getItem("school_id"),
+              sekolah_id: localStorage.getItem("school_id"),
             }}>
             <Title level={2}>Asesmen Siswa : {localStorage.getItem("school_name")}</Title>
-            <Form.Item name="school_id">
+            <Form.Item name="sekolah_id">
               <Input type="hidden" />
             </Form.Item>
 
             <Form.Item
-              name="Kelompok"
+              name="nama_kelompok"
               label="Nama Kelompok"
               rules={[
                 {
@@ -160,7 +183,7 @@ function AsesmenKelompokPage() {
             </Form.Item>
 
             <Form.Item
-              name="Nilai1"
+              name="nilai_project_1"
               label="Nilai Project 1"
               rules={[
                 {
@@ -172,7 +195,7 @@ function AsesmenKelompokPage() {
             </Form.Item>
 
             <Form.Item
-              name="Nilai2"
+              name="nilai_project_2"
               label="Nilai Project 2"
               rules={[
                 {
@@ -184,7 +207,7 @@ function AsesmenKelompokPage() {
             </Form.Item>
 
             <Form.Item
-              name="Nilai3"
+              name="nilai_project_3"
               label="Nilai Project 3"
               rules={[
                 {
