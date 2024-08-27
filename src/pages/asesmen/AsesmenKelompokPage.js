@@ -1,13 +1,4 @@
-import {
-  Button,
-  Form,
-  Input,
-  Layout,
-  Select,
-  notification,
-  Typography,
-  Spin,
-} from "antd";
+import { Button, Form, Input, Layout, Select, notification, Typography, Spin } from "antd";
 import React, { useState, useEffect } from "react";
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
 import formJson from "../../scripts/formAsesmenKelompok.json";
@@ -37,7 +28,7 @@ function AsesmenKelompokPage() {
 
   const openNotification = (
     placement,
-    description = "This is the content of the notification."
+    description = "This is the content of the notification.",
   ) => {
     api.success({
       message: `Notifikasi`,
@@ -57,6 +48,7 @@ function AsesmenKelompokPage() {
       const response = await fetch(`${baseUrl}/asesmen-kelompok`, {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -106,14 +98,11 @@ function AsesmenKelompokPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(
-      `${baseUrl}/kelompok?school_id=${localStorage.getItem("school_id")}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
+    fetch(`${baseUrl}/kelompok?school_id=${localStorage.getItem("school_id")}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setDataKelompok(data.data); // Assuming the data is an array of objects
@@ -139,11 +128,8 @@ function AsesmenKelompokPage() {
             autoComplete="off"
             initialValues={{
               school_id: localStorage.getItem("school_id"),
-            }}
-          >
-            <Title level={2}>
-              Asesmen Siswa : {localStorage.getItem("school_name")}
-            </Title>
+            }}>
+            <Title level={2}>Asesmen Siswa : {localStorage.getItem("school_name")}</Title>
             <Form.Item name="school_id">
               <Input type="hidden" />
             </Form.Item>
@@ -156,13 +142,8 @@ function AsesmenKelompokPage() {
                   required: true,
                   message: "Nama kelompok wajib diisi!",
                 },
-              ]}
-            >
-              <Select
-                placeholder="Pilih Kelompok"
-                optionFilterProp="children"
-                loading={loading}
-              >
+              ]}>
+              <Select placeholder="Pilih Kelompok" optionFilterProp="children" loading={loading}>
                 {loading ? (
                   <Option key="loading" value="loading" disabled>
                     <Spin />
@@ -186,8 +167,7 @@ function AsesmenKelompokPage() {
                   required: true,
                   message: "Nilai Project 1 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
@@ -199,8 +179,7 @@ function AsesmenKelompokPage() {
                   required: true,
                   message: "Nilai Project 2 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
@@ -212,8 +191,7 @@ function AsesmenKelompokPage() {
                   required: true,
                   message: "Nilai Project 3 wajib diisi!",
                 },
-              ]}
-            >
+              ]}>
               <Input placeholder="Gunakan 2digit angka. contoh: 85" />
             </Form.Item>
 
@@ -222,8 +200,7 @@ function AsesmenKelompokPage() {
                 loading={loadingSubmit}
                 type="primary"
                 htmlType="submit"
-                className="w-full lg:w-auto"
-              >
+                className="w-full lg:w-auto">
                 Kirim
               </Button>
             </Form.Item>
