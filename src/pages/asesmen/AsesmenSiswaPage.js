@@ -156,11 +156,11 @@ function AsesmenSiswaPage() {
       },
       {
         judul: selectedKelompok.judul_project_2,
-        tema: "Project 1 : " + selectedKelompok.tema_project_2,
+        tema: "Project 2 : " + selectedKelompok.tema_project_2,
       },
       {
         judul: selectedKelompok.judul_project_3,
-        tema: "Project 1 : " + selectedKelompok.tema_project_3,
+        tema: "Project 3 : " + selectedKelompok.tema_project_3,
       },
     ];
 
