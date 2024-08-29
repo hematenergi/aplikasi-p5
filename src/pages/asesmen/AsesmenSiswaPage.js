@@ -193,7 +193,7 @@ function AsesmenSiswaPage() {
             </Form.Item>
 
             <Form.Item
-              name="form_siswa_id"
+              name="kelompok_id"
               label="Nama Kelompok"
               rules={[
                 {
