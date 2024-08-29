@@ -76,7 +76,6 @@ function AsesmenKelompokPage() {
         // Display general error message
         message.error(msg || "Register failed. Please try again.");
       }
-      setLoadingSubmit(false);
 
       // setTimeout(() => {
       //   setLoadingSubmit(false);
@@ -84,6 +83,7 @@ function AsesmenKelompokPage() {
       //   form.resetFields();
       // }, 1000);
     } catch (error) {}
+    setLoadingSubmit(false);
   };
   const onFinish = (event) => {
     // console.log(event, "event")
