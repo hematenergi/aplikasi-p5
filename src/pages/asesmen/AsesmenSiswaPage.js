@@ -88,8 +88,8 @@ function AsesmenSiswaPage() {
 
     let body = {
       1958881053: values.sekolah_id,
+      1872189327: values.kelompok_id,
       940569363: values.nama_siswa,
-      1872189327: values.nama_kelompok,
       1413700900: values.project,
       1028950252: values.aspek_mengamati,
       27098894: values.aspek_menanya,
@@ -100,21 +100,22 @@ function AsesmenSiswaPage() {
 
     let bodyDb = {
       sekolah_id: values.sekolah_id,
+      kelompok_id: values.kelompok_id,
+      project_id: values.project_id,
       nama_siswa: values.nama_siswa,
-      nama_kelompok: values.nama_kelompok,
-      project: values.project,
       aspek_mengamati: values.aspek_mengamati,
       aspek_menanya: values.aspek_menanya,
       aspek_menalar: values.aspek_menalar,
       aspek_mencoba: values.aspek_mencoba,
       aspek_mengkomunikasikan: values.aspek_mengkomunikasikan,
-      skor_rata_rata:
+      skor_rata_rata: (
         (values.aspek_mengamati +
           values.aspek_menanya +
           values.aspek_menalar +
           values.aspek_mencoba +
           values.aspek_mengkomunikasikan) /
-        5,
+        5
+      ).toFixed(0),
     };
     // console.log(body, "body")
 
@@ -147,18 +148,21 @@ function AsesmenSiswaPage() {
 
   const [project, setproject] = useState([]);
   const handleKelompokChange = (value) => {
-    let selectedKelompok = dataKelompok.find((item) => item.nama_kelompok === value);
+    let selectedKelompok = dataKelompok.find((item) => item.id === value);
 
     const projects = [
       {
+        project_id: 1,
         judul: selectedKelompok.judul_project_1,
         tema: "Project 1 : " + selectedKelompok.tema_project_1,
       },
       {
+        project_id: 2,
         judul: selectedKelompok.judul_project_2,
         tema: "Project 2 : " + selectedKelompok.tema_project_2,
       },
       {
+        project_id: 3,
         judul: selectedKelompok.judul_project_3,
         tema: "Project 3 : " + selectedKelompok.tema_project_3,
       },
@@ -189,7 +193,7 @@ function AsesmenSiswaPage() {
             </Form.Item>
 
             <Form.Item
-              name="nama_kelompok"
+              name="form_siswa_id"
               label="Nama Kelompok"
               rules={[
                 {
@@ -209,7 +213,7 @@ function AsesmenSiswaPage() {
                 ) : (
                   dataKelompok &&
                   dataKelompok.map((item, index) => (
-                    <Option key={index} value={item.nama_kelompok}>
+                    <Option key={index} value={item.id}>
                       {item.nama_kelompok}
                     </Option>
                   ))
@@ -217,7 +221,7 @@ function AsesmenSiswaPage() {
               </Select>
             </Form.Item>
             <Form.Item
-              name="project"
+              name="project_id"
               label="Pilih Project"
               rules={[
                 {
@@ -229,7 +233,7 @@ function AsesmenSiswaPage() {
                 {project.map((project, index) => (
                   <Option
                     key={index}
-                    value={`${project.tema}<>${project.judul}`}
+                    value={`${project.project_id}`}
                     label={`${project.tema} - ${project.judul}`}>
                     {`${project.tema} - ${project.judul}`}
                   </Option>
