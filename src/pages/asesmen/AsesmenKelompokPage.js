@@ -152,7 +152,7 @@ function AsesmenKelompokPage() {
             initialValues={{
               sekolah_id: localStorage.getItem("school_id"),
             }}>
-            <Title level={2}>Asesmen Siswa : {localStorage.getItem("school_name")}</Title>
+            <Title level={2}>Asesmen Kelompok : {localStorage.getItem("school_name")}</Title>
             <Form.Item name="sekolah_id">
               <Input type="hidden" />
             </Form.Item>
