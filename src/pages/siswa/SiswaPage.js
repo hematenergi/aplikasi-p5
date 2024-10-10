@@ -37,10 +37,10 @@ function SiswaPage() {
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [dimensionCount, setDimensionCount] = useState(1);
-  const [selectedDimension, setSelectedDimension] = useState(null);
-  console.log(selectedDimension, "selectedDimension");
-  const [selectedElement, setSelectedElement] = useState(null);
-  const [selectedSubelement, setSelectedSubelement] = useState(null);
+  // const [selectedDimension, setSelectedDimension] = useState(null);
+  // console.log(selectedDimension, "selectedDimension");
+  // const [selectedElement, setSelectedElement] = useState(null);
+  // const [selectedSubelement, setSelectedSubelement] = useState(null);
   const [selectedTheme1, setSelectedTheme1] = useState(null);
   const [selectedTheme2, setSelectedTheme2] = useState(null);
   const [selectedTheme3, setSelectedTheme3] = useState(null);
