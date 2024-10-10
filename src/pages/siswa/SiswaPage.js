@@ -1,5 +1,15 @@
-import { Button, Form, Input, Layout, Select, Typography, message, notification } from "antd";
-import React, { useState } from "react";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Layout,
+  Select,
+  Typography,
+  message,
+  notification,
+} from "antd";
+import React, { useEffect, useState } from "react";
 import { GoogleFormProvider, useGoogleForm } from "react-google-forms-hooks";
 import { baseUrl } from "../../constant/url";
 import { Dimensions, Elements, Subelements, Themes } from "../../data/Data";
@@ -26,6 +36,7 @@ function SiswaPage() {
   const methods = useGoogleForm({ form: formJson });
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [dimensionCount, setDimensionCount] = useState(1);
   const [selectedDimension, setSelectedDimension] = useState(null);
   console.log(selectedDimension, "selectedDimension");
   const [selectedElement, setSelectedElement] = useState(null);
@@ -148,6 +159,24 @@ function SiswaPage() {
     }
   };
 
+  useEffect(() => {
+    // Update the form's dimension fields when dimensionCount changes
+    const currentDimensions = form.getFieldValue("dimensions") || [];
+    const newDimensions = [...currentDimensions];
+
+    if (dimensionCount > currentDimensions.length) {
+      // Add new dimension fields
+      for (let i = currentDimensions.length; i < dimensionCount; i++) {
+        newDimensions.push({});
+      }
+    } else if (dimensionCount < currentDimensions.length) {
+      // Remove excess dimension fields
+      newDimensions.splice(dimensionCount);
+    }
+
+    form.setFieldsValue({ dimensions: newDimensions });
+  }, [dimensionCount, form]);
+
   // const [data, setData] = useState([]);
   // const [loading, setLoading] = useState(false);
 
@@ -198,7 +227,7 @@ function SiswaPage() {
               <Input placeholder="Masukkan nama kelompok dengan format sbb. contoh :'Kelas 10 Kelompok 1'" />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               name="dimensi"
               label="Pilih Dimensi"
               rules={[
@@ -290,7 +319,132 @@ function SiswaPage() {
                 )}
               </Select>
             </Form.Item>
-            {getDescription(Subelements, selectedSubelement)}
+            {getDescription(Subelements, selectedSubelement)} */}
+
+            {/* input how much fields you want to add */}
+            <Form.Item
+              name="jumlah_dimensi"
+              label="Jumlah Dimensi"
+              rules={[{ required: true, message: "Jumlah Dimensi wajib diisi!" }]}>
+              <InputNumber
+                // className="w-full"
+                min={1}
+                max={6}
+                onChange={(value) => setDimensionCount(value)}
+              />
+            </Form.Item>
+
+            <Form.List name="dimensions" initialValue={[{}]}>
+              {(fields, { add, remove }) => (
+                <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-4`}>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <div
+                      key={key}
+                      style={{
+                        marginBottom: 24,
+                        border: "1px solid #d9d9d9",
+                        padding: 16,
+                        borderRadius: 8,
+                      }}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "dimensi"]}
+                        label="Pilih Dimensi"
+                        rules={[{ required: true, message: "Pilih Dimensi wajib diisi!" }]}>
+                        <Select
+                          placeholder="Pilih dimensi berdasarkan pilihan yang tersedia"
+                          allowClear
+                          onChange={(value) => {
+                            form.setFieldsValue({
+                              dimensions: {
+                                [name]: {
+                                  elemen: undefined,
+                                  subelemen: undefined,
+                                },
+                              },
+                            });
+                          }}>
+                          {Dimensions.map(({ id, label }) => (
+                            <Option key={id} value={id}>
+                              {label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                      {getDescription(
+                        Dimensions,
+                        form.getFieldValue(["dimensions", name, "dimensi"]),
+                      )}
+
+                      <Form.Item
+                        {...restField}
+                        name={[name, "elemen"]}
+                        label="Pilih Elemen"
+                        rules={[{ required: true, message: "Pilih Elemen wajib diisi!" }]}>
+                        <Select
+                          placeholder="Pilih elemen berdasarkan pilihan yang tersedia"
+                          allowClear
+                          onChange={() => {
+                            form.setFieldsValue({
+                              dimensions: {
+                                [name]: {
+                                  subelemen: undefined,
+                                },
+                              },
+                            });
+                          }}>
+                          {Elements.filter(
+                            (element) =>
+                              element.parent_id ===
+                              form.getFieldValue(["dimensions", name, "dimensi"]),
+                          ).map(({ id, label }) => (
+                            <Option key={id} value={id}>
+                              {label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                      {getDescription(Elements, form.getFieldValue(["dimensions", name, "elemen"]))}
+
+                      <Form.Item
+                        {...restField}
+                        name={[name, "subelemen"]}
+                        label="Pilih Subelemen"
+                        rules={[{ required: true, message: "Pilih Subelemen wajib diisi!" }]}>
+                        <Select
+                          placeholder="Pilih subelemen berdasarkan pilihan yang tersedia"
+                          allowClear>
+                          {Subelements.filter(
+                            (subelement) =>
+                              subelement.element_id ===
+                              form.getFieldValue(["dimensions", name, "elemen"]),
+                          ).map(({ id, label }) => (
+                            <Option key={id} value={id}>
+                              {label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                      {getDescription(
+                        Subelements,
+                        form.getFieldValue(["dimensions", name, "subelemen"]),
+                      )}
+
+                      {fields.length > 1 && (
+                        <Button type="dashed" onClick={() => remove(name)} block>
+                          Hapus Dimensi
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  {/* <Form.Item>
+                    <Button type="dashed" onClick={() => add()} block>
+                      Tambah Dimensi
+                    </Button>
+                  </Form.Item> */}
+                </div>
+              )}
+            </Form.List>
 
             <Form.Item
               name="tema_project_1"

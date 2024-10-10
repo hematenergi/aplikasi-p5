@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { getRoleName } from "../../utils/helper";
 
@@ -37,10 +37,13 @@ export const Home = () => {
         {roleName === "student" && (
           <>
             <Button label={"Form Siswa"} onClick={() => navigate("siswa")} />
-            <Button
+            {/* <Button
               label={"Download Template Essay"}
               onClick={() => window.open("http://aplikasi-p5.site/Format-Essay-P5.docx", "_blank")}
-            />
+            /> */}
+            <Link to={"https://aplikasi-p5.site/Format-Essay-P5.docx"} target="_blank">
+              <Button label={"Download Template Essay"} />
+            </Link>
           </>
         )}
 
