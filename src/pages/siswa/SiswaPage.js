@@ -106,6 +106,7 @@ function SiswaPage() {
     // console.log(event, "event")
 
     const values = form.getFieldsValue();
+
     console.log(values, "values");
 
     const findLabelStringById = (data, id) => {
@@ -194,6 +195,34 @@ function SiswaPage() {
   //     });
   // }, []);
 
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${baseUrl}/getsubmittedform`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setData(data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <Layout className="min-h-screen">
       {contextHolder}
@@ -208,8 +237,20 @@ function SiswaPage() {
             autoComplete="off"
             initialValues={{
               sekolah_id: localStorage.getItem("school_id"),
+              nama_kelompok: data.nama_kelompok || "",
+              tema_project_1: data.tema_project_1 || "",
+              judul_project_1: data.judul_project_1 || "",
+              tema_project_2: data.tema_project_2 || "",
+              judul_project_2: data.judul_project_2 || "",
+
+              tema_project_3: data.tema_project_3 || "",
+              judul_project_3: data.judul_project_3 || "",
             }}>
             <Title level={2}>Form Siswa : {localStorage.getItem("school_name")}</Title>
+
+            <Form.Item name="id">
+              <Input type="hidden" />
+            </Form.Item>
 
             <Form.Item name="sekolah_id">
               <Input type="hidden" />
