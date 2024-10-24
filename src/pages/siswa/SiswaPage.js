@@ -34,6 +34,7 @@ function SiswaPage() {
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
   const methods = useGoogleForm({ form: formJson });
+  const [refresh, setRefresh] = useState(0);
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [dimensionCount, setDimensionCount] = useState(1);
@@ -60,7 +61,7 @@ function SiswaPage() {
     setLoadingSubmit(true);
     console.log(">>> Here is the data", data);
     console.log(">>> Here are the errors!!!", methods.formState.errors);
-    await methods.submitToGoogleForms(data);
+    // await methods.submitToGoogleForms(data);
     console.log(methods, "methods");
 
     try {
@@ -79,6 +80,7 @@ function SiswaPage() {
         setTimeout(() => {
           openNotification("topRight", "Datamu berhasil di submit!");
           form.resetFields();
+          setRefresh(!refresh);
         }, 1000);
       } else {
         const { message: msg, errors } = handleApiError(data);
@@ -118,9 +120,9 @@ function SiswaPage() {
       // 1614735276: values.Sekolah,
       1614735276: values.sekolah_id,
       55847124: values.nama_kelompok,
-      1688946239: findLabelStringById(Dimensions, values.dimensi),
-      1226875206: findLabelStringById(Elements, values.elemen),
-      661708310: findLabelStringById(Subelements, values.subelemen),
+      // 1688946239: findLabelStringById(Dimensions, values.dimensi),
+      // 1226875206: findLabelStringById(Elements, values.elemen),
+      // 661708310: findLabelStringById(Subelements, values.subelemen),
       1168830625: findLabelStringById(Themes, values.tema_project_1),
       800214939: values.judul_project_1,
       1468357853: findLabelStringById(Themes, values.tema_project_2),
@@ -130,12 +132,23 @@ function SiswaPage() {
     };
     // console.log(body, "body")
 
+    const dimensionMapping = values.dimensions.map((value) => {
+      return {
+        dimensi: findLabelStringById(Dimensions, value.dimensi),
+        elemen: findLabelStringById(Elements, value.elemen),
+        subelemen: findLabelStringById(Subelements, value.subelemen),
+      };
+    });
+
+    console.log(dimensionMapping, "dimensionMapping");
+
     let bodyDb = {
       sekolah_id: values.sekolah_id,
       nama_kelompok: values.nama_kelompok,
-      dimensi: findLabelStringById(Dimensions, values.dimensi),
-      elemen: findLabelStringById(Elements, values.elemen),
-      subelemen: findLabelStringById(Subelements, values.subelemen),
+      dimension: dimensionMapping,
+      // dimensi: findLabelStringById(Dimensions, values.dimensi),
+      // elemen: findLabelStringById(Elements, values.elemen),
+      // subelemen: findLabelStringById(Subelements, values.subelemen),
       tema_project_1: findLabelStringById(Themes, values.tema_project_1),
       judul_project_1: values.judul_project_1,
       tema_project_2: findLabelStringById(Themes, values.tema_project_2),
@@ -219,7 +232,7 @@ function SiswaPage() {
     };
 
     fetchData();
-  }, []);
+  }, [refresh]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -237,14 +250,15 @@ function SiswaPage() {
             autoComplete="off"
             initialValues={{
               sekolah_id: localStorage.getItem("school_id"),
-              nama_kelompok: data.nama_kelompok || "",
-              tema_project_1: data.tema_project_1 || "",
-              judul_project_1: data.judul_project_1 || "",
-              tema_project_2: data.tema_project_2 || "",
-              judul_project_2: data.judul_project_2 || "",
+              dimensions: data?.dimension,
+              nama_kelompok: data?.nama_kelompok,
+              tema_project_1: data?.tema_project_1,
+              judul_project_1: data?.judul_project_1,
+              tema_project_2: data?.tema_project_2,
+              judul_project_2: data?.judul_project_2,
 
-              tema_project_3: data.tema_project_3 || "",
-              judul_project_3: data.judul_project_3 || "",
+              tema_project_3: data?.tema_project_3,
+              judul_project_3: data?.judul_project_3,
             }}>
             <Title level={2}>Form Siswa : {localStorage.getItem("school_name")}</Title>
 
@@ -375,7 +389,7 @@ function SiswaPage() {
               />
             </Form.Item>
 
-            <Form.List name="dimensions" initialValue={[{}]}>
+            <Form.List name="dimensions">
               {(fields, { add, remove }) => (
                 <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-4`}>
                   {fields.map(({ key, name, ...restField }) => (
